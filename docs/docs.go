@@ -17,15 +17,24 @@ var doc = `{
     "info": {
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
-        "contact": {},
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "API Support",
+            "url": "http://www.swagger.io/support",
+            "email": "support@swagger.io"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
         "version": "{{.Version}}"
     },
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/example/helloworld": {
+        "/getsql": {
             "get": {
-                "description": "do ping",
+                "description": "get SQL",
                 "consumes": [
                     "application/json"
                 ],
@@ -35,7 +44,7 @@ var doc = `{
                 "tags": [
                     "example"
                 ],
-                "summary": "ping example",
+                "summary": "get SQL",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -45,6 +54,34 @@ var doc = `{
                     }
                 }
             }
+        },
+        "/getvm": {
+            "get": {
+                "description": "get VMs",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "example"
+                ],
+                "summary": "get VMs",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "BasicAuth": {
+            "type": "basic"
         }
     }
 }`
@@ -60,12 +97,12 @@ type swaggerInfo struct {
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = swaggerInfo{
-	Version:     "",
-	Host:        "",
+	Version:     "1.0",
+	Host:        "localhost:8080",
 	BasePath:    "/api/v1",
 	Schemes:     []string{},
-	Title:       "",
-	Description: "",
+	Title:       "Swagger Example API",
+	Description: "This is a sample server celler server.",
 }
 
 type s struct{}

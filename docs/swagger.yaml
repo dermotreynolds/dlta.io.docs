@@ -1,12 +1,23 @@
 basePath: /api/v1
+host: localhost:8080
 info:
-  contact: {}
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a sample server celler server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Swagger Example API
+  version: "1.0"
 paths:
-  /example/helloworld:
+  /getsql:
     get:
       consumes:
       - application/json
-      description: do ping
+      description: get SQL
       produces:
       - application/json
       responses:
@@ -14,7 +25,25 @@ paths:
           description: OK
           schema:
             type: string
-      summary: ping example
+      summary: get SQL
       tags:
       - example
+  /getvm:
+    get:
+      consumes:
+      - application/json
+      description: get VMs
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: get VMs
+      tags:
+      - example
+securityDefinitions:
+  BasicAuth:
+    type: basic
 swagger: "2.0"
