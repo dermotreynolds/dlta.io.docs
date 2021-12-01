@@ -72,9 +72,1860 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/main.dltaVmAsset"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "big.Int": {
+            "type": "object"
+        },
+        "compute.AdditionalCapabilities": {
+            "type": "object",
+            "properties": {
+                "ultraSSDEnabled": {
+                    "description": "UltraSSDEnabled - The flag that enables or disables a capability to have one or more managed data disks with UltraSSD_LRS storage account type on the VM or VMSS. Managed disks with storage account type UltraSSD_LRS can be added to a virtual machine or virtual machine scale set only if this property is enabled.",
+                    "type": "boolean"
+                }
+            }
+        },
+        "compute.AdditionalUnattendContent": {
+            "type": "object",
+            "properties": {
+                "componentName": {
+                    "description": "ComponentName - The component name. Currently, the only allowable value is Microsoft-Windows-Shell-Setup. Possible values include: 'MicrosoftWindowsShellSetup'",
+                    "type": "string"
+                },
+                "content": {
+                    "description": "Content - Specifies the XML formatted content that is added to the unattend.xml file for the specified path and component. The XML must be less than 4KB and must include the root element for the setting or feature that is being inserted.",
+                    "type": "string"
+                },
+                "passName": {
+                    "description": "PassName - The pass name. Currently, the only allowable value is OobeSystem. Possible values include: 'OobeSystem'",
+                    "type": "string"
+                },
+                "settingName": {
+                    "description": "SettingName - Specifies the name of the setting to which the content applies. Possible values are: FirstLogonCommands and AutoLogon. Possible values include: 'AutoLogon', 'FirstLogonCommands'",
+                    "type": "string"
+                }
+            }
+        },
+        "compute.BootDiagnostics": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "description": "Enabled - Whether boot diagnostics should be enabled on the Virtual Machine.",
+                    "type": "boolean"
+                },
+                "storageUri": {
+                    "description": "StorageURI - Uri of the storage account to use for placing the console output and screenshot.",
+                    "type": "string"
+                }
+            }
+        },
+        "compute.BootDiagnosticsInstanceView": {
+            "type": "object",
+            "properties": {
+                "consoleScreenshotBlobUri": {
+                    "description": "ConsoleScreenshotBlobURI - READ-ONLY; The console screenshot blob URI.",
+                    "type": "string"
+                },
+                "serialConsoleLogBlobUri": {
+                    "description": "SerialConsoleLogBlobURI - READ-ONLY; The Linux serial console log blob Uri.",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "Status - READ-ONLY; The boot diagnostics status information for the VM. \u003cbr\u003e\u003cbr\u003e NOTE: It will be set only if there are errors encountered in enabling boot diagnostics.",
+                    "$ref": "#/definitions/compute.InstanceViewStatus"
+                }
+            }
+        },
+        "compute.DataDisk": {
+            "type": "object",
+            "properties": {
+                "caching": {
+                    "description": "Caching - Specifies the caching requirements. \u003cbr\u003e\u003cbr\u003e Possible values are: \u003cbr\u003e\u003cbr\u003e **None** \u003cbr\u003e\u003cbr\u003e **ReadOnly** \u003cbr\u003e\u003cbr\u003e **ReadWrite** \u003cbr\u003e\u003cbr\u003e Default: **None for Standard storage. ReadOnly for Premium storage**. Possible values include: 'CachingTypesNone', 'CachingTypesReadOnly', 'CachingTypesReadWrite'",
+                    "type": "string"
+                },
+                "createOption": {
+                    "description": "CreateOption - Specifies how the virtual machine should be created.\u003cbr\u003e\u003cbr\u003e Possible values are:\u003cbr\u003e\u003cbr\u003e **Attach** \\u2013 This value is used when you are using a specialized disk to create the virtual machine.\u003cbr\u003e\u003cbr\u003e **FromImage** \\u2013 This value is used when you are using an image to create the virtual machine. If you are using a platform image, you also use the imageReference element described above. If you are using a marketplace image, you  also use the plan element previously described. Possible values include: 'DiskCreateOptionTypesFromImage', 'DiskCreateOptionTypesEmpty', 'DiskCreateOptionTypesAttach'",
+                    "type": "string"
+                },
+                "diskSizeGB": {
+                    "description": "DiskSizeGB - Specifies the size of an empty data disk in gigabytes. This element can be used to overwrite the size of the disk in a virtual machine image. \u003cbr\u003e\u003cbr\u003e This value cannot be larger than 1023 GB",
+                    "type": "integer"
+                },
+                "image": {
+                    "description": "Image - The source user image virtual hard disk. The virtual hard disk will be copied before being attached to the virtual machine. If SourceImage is provided, the destination virtual hard drive must not exist.",
+                    "$ref": "#/definitions/compute.VirtualHardDisk"
+                },
+                "lun": {
+                    "description": "Lun - Specifies the logical unit number of the data disk. This value is used to identify data disks within the VM and therefore must be unique for each data disk attached to a VM.",
+                    "type": "integer"
+                },
+                "managedDisk": {
+                    "description": "ManagedDisk - The managed disk parameters.",
+                    "$ref": "#/definitions/compute.ManagedDiskParameters"
+                },
+                "name": {
+                    "description": "Name - The disk name.",
+                    "type": "string"
+                },
+                "vhd": {
+                    "description": "Vhd - The virtual hard disk.",
+                    "$ref": "#/definitions/compute.VirtualHardDisk"
+                },
+                "writeAcceleratorEnabled": {
+                    "description": "WriteAcceleratorEnabled - Specifies whether writeAccelerator should be enabled or disabled on the disk.",
+                    "type": "boolean"
+                }
+            }
+        },
+        "compute.DiagnosticsProfile": {
+            "type": "object",
+            "properties": {
+                "bootDiagnostics": {
+                    "description": "BootDiagnostics - Boot Diagnostics is a debugging feature which allows you to view Console Output and Screenshot to diagnose VM status. \u003cbr\u003e\u003cbr\u003e You can easily view the output of your console log. \u003cbr\u003e\u003cbr\u003e Azure also enables you to see a screenshot of the VM from the hypervisor.",
+                    "$ref": "#/definitions/compute.BootDiagnostics"
+                }
+            }
+        },
+        "compute.DiffDiskSettings": {
+            "type": "object",
+            "properties": {
+                "option": {
+                    "description": "Option - Specifies the ephemeral disk settings for operating system disk. Possible values include: 'Local'",
+                    "type": "string"
+                }
+            }
+        },
+        "compute.DiskEncryptionSettings": {
+            "type": "object",
+            "properties": {
+                "diskEncryptionKey": {
+                    "description": "DiskEncryptionKey - Specifies the location of the disk encryption key, which is a Key Vault Secret.",
+                    "$ref": "#/definitions/compute.KeyVaultSecretReference"
+                },
+                "enabled": {
+                    "description": "Enabled - Specifies whether disk encryption should be enabled on the virtual machine.",
+                    "type": "boolean"
+                },
+                "keyEncryptionKey": {
+                    "description": "KeyEncryptionKey - Specifies the location of the key encryption key in Key Vault.",
+                    "$ref": "#/definitions/compute.KeyVaultKeyReference"
+                }
+            }
+        },
+        "compute.DiskInstanceView": {
+            "type": "object",
+            "properties": {
+                "encryptionSettings": {
+                    "description": "EncryptionSettings - Specifies the encryption settings for the OS Disk. \u003cbr\u003e\u003cbr\u003e Minimum api-version: 2015-06-15",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/compute.DiskEncryptionSettings"
+                    }
+                },
+                "name": {
+                    "description": "Name - The disk name.",
+                    "type": "string"
+                },
+                "statuses": {
+                    "description": "Statuses - The resource status information.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/compute.InstanceViewStatus"
+                    }
+                }
+            }
+        },
+        "compute.HardwareProfile": {
+            "type": "object",
+            "properties": {
+                "vmSize": {
+                    "description": "VMSize - Specifies the size of the virtual machine. For more information about virtual machine sizes, see [Sizes for virtual machines](https://docs.microsoft.com/azure/virtual-machines/virtual-machines-windows-sizes?toc=%2fazure%2fvirtual-machines%2fwindows%2ftoc.json). \u003cbr\u003e\u003cbr\u003e The available VM sizes depend on region and availability set. For a list of available sizes use these APIs:  \u003cbr\u003e\u003cbr\u003e [List all available virtual machine sizes in an availability set](https://docs.microsoft.com/rest/api/compute/availabilitysets/listavailablesizes) \u003cbr\u003e\u003cbr\u003e [List all available virtual machine sizes in a region](https://docs.microsoft.com/rest/api/compute/virtualmachinesizes/list) \u003cbr\u003e\u003cbr\u003e [List all available virtual machine sizes for resizing](https://docs.microsoft.com/rest/api/compute/virtualmachines/listavailablesizes). Possible values include: 'VirtualMachineSizeTypesBasicA0', 'VirtualMachineSizeTypesBasicA1', 'VirtualMachineSizeTypesBasicA2', 'VirtualMachineSizeTypesBasicA3', 'VirtualMachineSizeTypesBasicA4', 'VirtualMachineSizeTypesStandardA0', 'VirtualMachineSizeTypesStandardA1', 'VirtualMachineSizeTypesStandardA2', 'VirtualMachineSizeTypesStandardA3', 'VirtualMachineSizeTypesStandardA4', 'VirtualMachineSizeTypesStandardA5', 'VirtualMachineSizeTypesStandardA6', 'VirtualMachineSizeTypesStandardA7', 'VirtualMachineSizeTypesStandardA8', 'VirtualMachineSizeTypesStandardA9', 'VirtualMachineSizeTypesStandardA10', 'VirtualMachineSizeTypesStandardA11', 'VirtualMachineSizeTypesStandardA1V2', 'VirtualMachineSizeTypesStandardA2V2', 'VirtualMachineSizeTypesStandardA4V2', 'VirtualMachineSizeTypesStandardA8V2', 'VirtualMachineSizeTypesStandardA2mV2', 'VirtualMachineSizeTypesStandardA4mV2', 'VirtualMachineSizeTypesStandardA8mV2', 'VirtualMachineSizeTypesStandardB1s', 'VirtualMachineSizeTypesStandardB1ms', 'VirtualMachineSizeTypesStandardB2s', 'VirtualMachineSizeTypesStandardB2ms', 'VirtualMachineSizeTypesStandardB4ms', 'VirtualMachineSizeTypesStandardB8ms', 'VirtualMachineSizeTypesStandardD1', 'VirtualMachineSizeTypesStandardD2', 'VirtualMachineSizeTypesStandardD3', 'VirtualMachineSizeTypesStandardD4', 'VirtualMachineSizeTypesStandardD11', 'VirtualMachineSizeTypesStandardD12', 'VirtualMachineSizeTypesStandardD13', 'VirtualMachineSizeTypesStandardD14', 'VirtualMachineSizeTypesStandardD1V2', 'VirtualMachineSizeTypesStandardD2V2', 'VirtualMachineSizeTypesStandardD3V2', 'VirtualMachineSizeTypesStandardD4V2', 'VirtualMachineSizeTypesStandardD5V2', 'VirtualMachineSizeTypesStandardD2V3', 'VirtualMachineSizeTypesStandardD4V3', 'VirtualMachineSizeTypesStandardD8V3', 'VirtualMachineSizeTypesStandardD16V3', 'VirtualMachineSizeTypesStandardD32V3', 'VirtualMachineSizeTypesStandardD64V3', 'VirtualMachineSizeTypesStandardD2sV3', 'VirtualMachineSizeTypesStandardD4sV3', 'VirtualMachineSizeTypesStandardD8sV3', 'VirtualMachineSizeTypesStandardD16sV3', 'VirtualMachineSizeTypesStandardD32sV3', 'VirtualMachineSizeTypesStandardD64sV3', 'VirtualMachineSizeTypesStandardD11V2', 'VirtualMachineSizeTypesStandardD12V2', 'VirtualMachineSizeTypesStandardD13V2', 'VirtualMachineSizeTypesStandardD14V2', 'VirtualMachineSizeTypesStandardD15V2', 'VirtualMachineSizeTypesStandardDS1', 'VirtualMachineSizeTypesStandardDS2', 'VirtualMachineSizeTypesStandardDS3', 'VirtualMachineSizeTypesStandardDS4', 'VirtualMachineSizeTypesStandardDS11', 'VirtualMachineSizeTypesStandardDS12', 'VirtualMachineSizeTypesStandardDS13', 'VirtualMachineSizeTypesStandardDS14', 'VirtualMachineSizeTypesStandardDS1V2', 'VirtualMachineSizeTypesStandardDS2V2', 'VirtualMachineSizeTypesStandardDS3V2', 'VirtualMachineSizeTypesStandardDS4V2', 'VirtualMachineSizeTypesStandardDS5V2', 'VirtualMachineSizeTypesStandardDS11V2', 'VirtualMachineSizeTypesStandardDS12V2', 'VirtualMachineSizeTypesStandardDS13V2', 'VirtualMachineSizeTypesStandardDS14V2', 'VirtualMachineSizeTypesStandardDS15V2', 'VirtualMachineSizeTypesStandardDS134V2', 'VirtualMachineSizeTypesStandardDS132V2', 'VirtualMachineSizeTypesStandardDS148V2', 'VirtualMachineSizeTypesStandardDS144V2', 'VirtualMachineSizeTypesStandardE2V3', 'VirtualMachineSizeTypesStandardE4V3', 'VirtualMachineSizeTypesStandardE8V3', 'VirtualMachineSizeTypesStandardE16V3', 'VirtualMachineSizeTypesStandardE32V3', 'VirtualMachineSizeTypesStandardE64V3', 'VirtualMachineSizeTypesStandardE2sV3', 'VirtualMachineSizeTypesStandardE4sV3', 'VirtualMachineSizeTypesStandardE8sV3', 'VirtualMachineSizeTypesStandardE16sV3', 'VirtualMachineSizeTypesStandardE32sV3', 'VirtualMachineSizeTypesStandardE64sV3', 'VirtualMachineSizeTypesStandardE3216V3', 'VirtualMachineSizeTypesStandardE328sV3', 'VirtualMachineSizeTypesStandardE6432sV3', 'VirtualMachineSizeTypesStandardE6416sV3', 'VirtualMachineSizeTypesStandardF1', 'VirtualMachineSizeTypesStandardF2', 'VirtualMachineSizeTypesStandardF4', 'VirtualMachineSizeTypesStandardF8', 'VirtualMachineSizeTypesStandardF16', 'VirtualMachineSizeTypesStandardF1s', 'VirtualMachineSizeTypesStandardF2s', 'VirtualMachineSizeTypesStandardF4s', 'VirtualMachineSizeTypesStandardF8s', 'VirtualMachineSizeTypesStandardF16s', 'VirtualMachineSizeTypesStandardF2sV2', 'VirtualMachineSizeTypesStandardF4sV2', 'VirtualMachineSizeTypesStandardF8sV2', 'VirtualMachineSizeTypesStandardF16sV2', 'VirtualMachineSizeTypesStandardF32sV2', 'VirtualMachineSizeTypesStandardF64sV2', 'VirtualMachineSizeTypesStandardF72sV2', 'VirtualMachineSizeTypesStandardG1', 'VirtualMachineSizeTypesStandardG2', 'VirtualMachineSizeTypesStandardG3', 'VirtualMachineSizeTypesStandardG4', 'VirtualMachineSizeTypesStandardG5', 'VirtualMachineSizeTypesStandardGS1', 'VirtualMachineSizeTypesStandardGS2', 'VirtualMachineSizeTypesStandardGS3', 'VirtualMachineSizeTypesStandardGS4', 'VirtualMachineSizeTypesStandardGS5', 'VirtualMachineSizeTypesStandardGS48', 'VirtualMachineSizeTypesStandardGS44', 'VirtualMachineSizeTypesStandardGS516', 'VirtualMachineSizeTypesStandardGS58', 'VirtualMachineSizeTypesStandardH8', 'VirtualMachineSizeTypesStandardH16', 'VirtualMachineSizeTypesStandardH8m', 'VirtualMachineSizeTypesStandardH16m', 'VirtualMachineSizeTypesStandardH16r', 'VirtualMachineSizeTypesStandardH16mr', 'VirtualMachineSizeTypesStandardL4s', 'VirtualMachineSizeTypesStandardL8s', 'VirtualMachineSizeTypesStandardL16s', 'VirtualMachineSizeTypesStandardL32s', 'VirtualMachineSizeTypesStandardM64s', 'VirtualMachineSizeTypesStandardM64ms', 'VirtualMachineSizeTypesStandardM128s', 'VirtualMachineSizeTypesStandardM128ms', 'VirtualMachineSizeTypesStandardM6432ms', 'VirtualMachineSizeTypesStandardM6416ms', 'VirtualMachineSizeTypesStandardM12864ms', 'VirtualMachineSizeTypesStandardM12832ms', 'VirtualMachineSizeTypesStandardNC6', 'VirtualMachineSizeTypesStandardNC12', 'VirtualMachineSizeTypesStandardNC24', 'VirtualMachineSizeTypesStandardNC24r', 'VirtualMachineSizeTypesStandardNC6sV2', 'VirtualMachineSizeTypesStandardNC12sV2', 'VirtualMachineSizeTypesStandardNC24sV2', 'VirtualMachineSizeTypesStandardNC24rsV2', 'VirtualMachineSizeTypesStandardNC6sV3', 'VirtualMachineSizeTypesStandardNC12sV3', 'VirtualMachineSizeTypesStandardNC24sV3', 'VirtualMachineSizeTypesStandardNC24rsV3', 'VirtualMachineSizeTypesStandardND6s', 'VirtualMachineSizeTypesStandardND12s', 'VirtualMachineSizeTypesStandardND24s', 'VirtualMachineSizeTypesStandardND24rs', 'VirtualMachineSizeTypesStandardNV6', 'VirtualMachineSizeTypesStandardNV12', 'VirtualMachineSizeTypesStandardNV24'",
+                    "type": "string"
+                }
+            }
+        },
+        "compute.ImageReference": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "ID - Resource Id",
+                    "type": "string"
+                },
+                "offer": {
+                    "description": "Offer - Specifies the offer of the platform image or marketplace image used to create the virtual machine.",
+                    "type": "string"
+                },
+                "publisher": {
+                    "description": "Publisher - The image publisher.",
+                    "type": "string"
+                },
+                "sku": {
+                    "description": "Sku - The image SKU.",
+                    "type": "string"
+                },
+                "version": {
+                    "description": "Version - Specifies the version of the platform image or marketplace image used to create the virtual machine. The allowed formats are Major.Minor.Build or 'latest'. Major, Minor, and Build are decimal numbers. Specify 'latest' to use the latest version of an image available at deploy time. Even if you use 'latest', the VM image will not automatically update after deploy time even if a new version becomes available.",
+                    "type": "string"
+                }
+            }
+        },
+        "compute.InstanceViewStatus": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "Code - The status code.",
+                    "type": "string"
+                },
+                "displayStatus": {
+                    "description": "DisplayStatus - The short localizable label for the status.",
+                    "type": "string"
+                },
+                "level": {
+                    "description": "Level - The level code. Possible values include: 'Info', 'Warning', 'Error'",
+                    "type": "string"
+                },
+                "message": {
+                    "description": "Message - The detailed status message, including for alerts and error messages.",
+                    "type": "string"
+                },
+                "time": {
+                    "description": "Time - The time of the status.",
+                    "type": "string"
+                }
+            }
+        },
+        "compute.KeyVaultKeyReference": {
+            "type": "object",
+            "properties": {
+                "keyUrl": {
+                    "description": "KeyURL - The URL referencing a key encryption key in Key Vault.",
+                    "type": "string"
+                },
+                "sourceVault": {
+                    "description": "SourceVault - The relative URL of the Key Vault containing the key.",
+                    "$ref": "#/definitions/compute.SubResource"
+                }
+            }
+        },
+        "compute.KeyVaultSecretReference": {
+            "type": "object",
+            "properties": {
+                "secretUrl": {
+                    "description": "SecretURL - The URL referencing a secret in a Key Vault.",
+                    "type": "string"
+                },
+                "sourceVault": {
+                    "description": "SourceVault - The relative URL of the Key Vault containing the secret.",
+                    "$ref": "#/definitions/compute.SubResource"
+                }
+            }
+        },
+        "compute.LinuxConfiguration": {
+            "type": "object",
+            "properties": {
+                "disablePasswordAuthentication": {
+                    "description": "DisablePasswordAuthentication - Specifies whether password authentication should be disabled.",
+                    "type": "boolean"
+                },
+                "provisionVMAgent": {
+                    "description": "ProvisionVMAgent - Indicates whether virtual machine agent should be provisioned on the virtual machine. \u003cbr\u003e\u003cbr\u003e When this property is not specified in the request body, default behavior is to set it to true.  This will ensure that VM Agent is installed on the VM so that extensions can be added to the VM later.",
+                    "type": "boolean"
+                },
+                "ssh": {
+                    "description": "SSH - Specifies the ssh key configuration for a Linux OS.",
+                    "$ref": "#/definitions/compute.SSHConfiguration"
+                }
+            }
+        },
+        "compute.MaintenanceRedeployStatus": {
+            "type": "object",
+            "properties": {
+                "isCustomerInitiatedMaintenanceAllowed": {
+                    "description": "IsCustomerInitiatedMaintenanceAllowed - True, if customer is allowed to perform Maintenance.",
+                    "type": "boolean"
+                },
+                "lastOperationMessage": {
+                    "description": "LastOperationMessage - Message returned for the last Maintenance Operation.",
+                    "type": "string"
+                },
+                "lastOperationResultCode": {
+                    "description": "LastOperationResultCode - The Last Maintenance Operation Result Code. Possible values include: 'MaintenanceOperationResultCodeTypesNone', 'MaintenanceOperationResultCodeTypesRetryLater', 'MaintenanceOperationResultCodeTypesMaintenanceAborted', 'MaintenanceOperationResultCodeTypesMaintenanceCompleted'",
+                    "type": "string"
+                },
+                "maintenanceWindowEndTime": {
+                    "description": "MaintenanceWindowEndTime - End Time for the Maintenance Window.",
+                    "type": "string"
+                },
+                "maintenanceWindowStartTime": {
+                    "description": "MaintenanceWindowStartTime - Start Time for the Maintenance Window.",
+                    "type": "string"
+                },
+                "preMaintenanceWindowEndTime": {
+                    "description": "PreMaintenanceWindowEndTime - End Time for the Pre Maintenance Window.",
+                    "type": "string"
+                },
+                "preMaintenanceWindowStartTime": {
+                    "description": "PreMaintenanceWindowStartTime - Start Time for the Pre Maintenance Window.",
+                    "type": "string"
+                }
+            }
+        },
+        "compute.ManagedDiskParameters": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "ID - Resource Id",
+                    "type": "string"
+                },
+                "storageAccountType": {
+                    "description": "StorageAccountType - Specifies the storage account type for the managed disk. NOTE: UltraSSD_LRS can only be used with data disks, it cannot be used with OS Disk. Possible values include: 'StorageAccountTypesStandardLRS', 'StorageAccountTypesPremiumLRS', 'StorageAccountTypesStandardSSDLRS', 'StorageAccountTypesUltraSSDLRS'",
+                    "type": "string"
+                }
+            }
+        },
+        "compute.NetworkInterfaceReference": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "ID - Resource Id",
+                    "type": "string"
+                },
+                "primary": {
+                    "description": "Primary - Specifies the primary network interface in case the virtual machine has more than 1 network interface.",
+                    "type": "boolean"
+                }
+            }
+        },
+        "compute.NetworkProfile": {
+            "type": "object",
+            "properties": {
+                "networkInterfaces": {
+                    "description": "NetworkInterfaces - Specifies the list of resource Ids for the network interfaces associated with the virtual machine.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/compute.NetworkInterfaceReference"
+                    }
+                }
+            }
+        },
+        "compute.OSDisk": {
+            "type": "object",
+            "properties": {
+                "caching": {
+                    "description": "Caching - Specifies the caching requirements. \u003cbr\u003e\u003cbr\u003e Possible values are: \u003cbr\u003e\u003cbr\u003e **None** \u003cbr\u003e\u003cbr\u003e **ReadOnly** \u003cbr\u003e\u003cbr\u003e **ReadWrite** \u003cbr\u003e\u003cbr\u003e Default: **None for Standard storage. ReadOnly for Premium storage**. Possible values include: 'CachingTypesNone', 'CachingTypesReadOnly', 'CachingTypesReadWrite'",
+                    "type": "string"
+                },
+                "createOption": {
+                    "description": "CreateOption - Specifies how the virtual machine should be created.\u003cbr\u003e\u003cbr\u003e Possible values are:\u003cbr\u003e\u003cbr\u003e **Attach** \\u2013 This value is used when you are using a specialized disk to create the virtual machine.\u003cbr\u003e\u003cbr\u003e **FromImage** \\u2013 This value is used when you are using an image to create the virtual machine. If you are using a platform image, you also use the imageReference element described above. If you are using a marketplace image, you  also use the plan element previously described. Possible values include: 'DiskCreateOptionTypesFromImage', 'DiskCreateOptionTypesEmpty', 'DiskCreateOptionTypesAttach'",
+                    "type": "string"
+                },
+                "diffDiskSettings": {
+                    "description": "DiffDiskSettings - Specifies the ephemeral Disk Settings for the operating system disk used by the virtual machine.",
+                    "$ref": "#/definitions/compute.DiffDiskSettings"
+                },
+                "diskSizeGB": {
+                    "description": "DiskSizeGB - Specifies the size of an empty data disk in gigabytes. This element can be used to overwrite the size of the disk in a virtual machine image. \u003cbr\u003e\u003cbr\u003e This value cannot be larger than 1023 GB",
+                    "type": "integer"
+                },
+                "encryptionSettings": {
+                    "description": "EncryptionSettings - Specifies the encryption settings for the OS Disk. \u003cbr\u003e\u003cbr\u003e Minimum api-version: 2015-06-15",
+                    "$ref": "#/definitions/compute.DiskEncryptionSettings"
+                },
+                "image": {
+                    "description": "Image - The source user image virtual hard disk. The virtual hard disk will be copied before being attached to the virtual machine. If SourceImage is provided, the destination virtual hard drive must not exist.",
+                    "$ref": "#/definitions/compute.VirtualHardDisk"
+                },
+                "managedDisk": {
+                    "description": "ManagedDisk - The managed disk parameters.",
+                    "$ref": "#/definitions/compute.ManagedDiskParameters"
+                },
+                "name": {
+                    "description": "Name - The disk name.",
+                    "type": "string"
+                },
+                "osType": {
+                    "description": "OsType - This property allows you to specify the type of the OS that is included in the disk if creating a VM from user-image or a specialized VHD. \u003cbr\u003e\u003cbr\u003e Possible values are: \u003cbr\u003e\u003cbr\u003e **Windows** \u003cbr\u003e\u003cbr\u003e **Linux**. Possible values include: 'Windows', 'Linux'",
+                    "type": "string"
+                },
+                "vhd": {
+                    "description": "Vhd - The virtual hard disk.",
+                    "$ref": "#/definitions/compute.VirtualHardDisk"
+                },
+                "writeAcceleratorEnabled": {
+                    "description": "WriteAcceleratorEnabled - Specifies whether writeAccelerator should be enabled or disabled on the disk.",
+                    "type": "boolean"
+                }
+            }
+        },
+        "compute.OSProfile": {
+            "type": "object",
+            "properties": {
+                "adminPassword": {
+                    "description": "AdminPassword - Specifies the password of the administrator account. \u003cbr\u003e\u003cbr\u003e **Minimum-length (Windows):** 8 characters \u003cbr\u003e\u003cbr\u003e **Minimum-length (Linux):** 6 characters \u003cbr\u003e\u003cbr\u003e **Max-length (Windows):** 123 characters \u003cbr\u003e\u003cbr\u003e **Max-length (Linux):** 72 characters \u003cbr\u003e\u003cbr\u003e **Complexity requirements:** 3 out of 4 conditions below need to be fulfilled \u003cbr\u003e Has lower characters \u003cbr\u003eHas upper characters \u003cbr\u003e Has a digit \u003cbr\u003e Has a special character (Regex match [\\W_]) \u003cbr\u003e\u003cbr\u003e **Disallowed values:** \"abc@123\", \"P@$$w0rd\", \"P@ssw0rd\", \"P@ssword123\", \"Pa$$word\", \"pass@word1\", \"Password!\", \"Password1\", \"Password22\", \"iloveyou!\" \u003cbr\u003e\u003cbr\u003e For resetting the password, see [How to reset the Remote Desktop service or its login password in a Windows VM](https://docs.microsoft.com/azure/virtual-machines/virtual-machines-windows-reset-rdp?toc=%2fazure%2fvirtual-machines%2fwindows%2ftoc.json) \u003cbr\u003e\u003cbr\u003e For resetting root password, see [Manage users, SSH, and check or repair disks on Azure Linux VMs using the VMAccess Extension](https://docs.microsoft.com/azure/virtual-machines/virtual-machines-linux-using-vmaccess-extension?toc=%2fazure%2fvirtual-machines%2flinux%2ftoc.json#reset-root-password)",
+                    "type": "string"
+                },
+                "adminUsername": {
+                    "description": "AdminUsername - Specifies the name of the administrator account. \u003cbr\u003e\u003cbr\u003e **Windows-only restriction:** Cannot end in \".\" \u003cbr\u003e\u003cbr\u003e **Disallowed values:** \"administrator\", \"admin\", \"user\", \"user1\", \"test\", \"user2\", \"test1\", \"user3\", \"admin1\", \"1\", \"123\", \"a\", \"actuser\", \"adm\", \"admin2\", \"aspnet\", \"backup\", \"console\", \"david\", \"guest\", \"john\", \"owner\", \"root\", \"server\", \"sql\", \"support\", \"support_388945a0\", \"sys\", \"test2\", \"test3\", \"user4\", \"user5\". \u003cbr\u003e\u003cbr\u003e **Minimum-length (Linux):** 1  character \u003cbr\u003e\u003cbr\u003e **Max-length (Linux):** 64 characters \u003cbr\u003e\u003cbr\u003e **Max-length (Windows):** 20 characters  \u003cbr\u003e\u003cbr\u003e\u003cli\u003e For root access to the Linux VM, see [Using root privileges on Linux virtual machines in Azure](https://docs.microsoft.com/azure/virtual-machines/virtual-machines-linux-use-root-privileges?toc=%2fazure%2fvirtual-machines%2flinux%2ftoc.json)\u003cbr\u003e\u003cli\u003e For a list of built-in system users on Linux that should not be used in this field, see [Selecting User Names for Linux on Azure](https://docs.microsoft.com/azure/virtual-machines/virtual-machines-linux-usernames?toc=%2fazure%2fvirtual-machines%2flinux%2ftoc.json)",
+                    "type": "string"
+                },
+                "allowExtensionOperations": {
+                    "description": "AllowExtensionOperations - Specifies whether extension operations should be allowed on the virtual machine. \u003cbr\u003e\u003cbr\u003eThis may only be set to False when no extensions are present on the virtual machine.",
+                    "type": "boolean"
+                },
+                "computerName": {
+                    "description": "ComputerName - Specifies the host OS name of the virtual machine. \u003cbr\u003e\u003cbr\u003e This name cannot be updated after the VM is created. \u003cbr\u003e\u003cbr\u003e **Max-length (Windows):** 15 characters \u003cbr\u003e\u003cbr\u003e **Max-length (Linux):** 64 characters. \u003cbr\u003e\u003cbr\u003e For naming conventions and restrictions see [Azure infrastructure services implementation guidelines](https://docs.microsoft.com/azure/virtual-machines/virtual-machines-linux-infrastructure-subscription-accounts-guidelines?toc=%2fazure%2fvirtual-machines%2flinux%2ftoc.json#1-naming-conventions).",
+                    "type": "string"
+                },
+                "customData": {
+                    "description": "CustomData - Specifies a base-64 encoded string of custom data. The base-64 encoded string is decoded to a binary array that is saved as a file on the Virtual Machine. The maximum length of the binary array is 65535 bytes. \u003cbr\u003e\u003cbr\u003e For using cloud-init for your VM, see [Using cloud-init to customize a Linux VM during creation](https://docs.microsoft.com/azure/virtual-machines/virtual-machines-linux-using-cloud-init?toc=%2fazure%2fvirtual-machines%2flinux%2ftoc.json)",
+                    "type": "string"
+                },
+                "linuxConfiguration": {
+                    "description": "LinuxConfiguration - Specifies the Linux operating system settings on the virtual machine. \u003cbr\u003e\u003cbr\u003eFor a list of supported Linux distributions, see [Linux on Azure-Endorsed Distributions](https://docs.microsoft.com/azure/virtual-machines/virtual-machines-linux-endorsed-distros?toc=%2fazure%2fvirtual-machines%2flinux%2ftoc.json) \u003cbr\u003e\u003cbr\u003e For running non-endorsed distributions, see [Information for Non-Endorsed Distributions](https://docs.microsoft.com/azure/virtual-machines/virtual-machines-linux-create-upload-generic?toc=%2fazure%2fvirtual-machines%2flinux%2ftoc.json).",
+                    "$ref": "#/definitions/compute.LinuxConfiguration"
+                },
+                "secrets": {
+                    "description": "Secrets - Specifies set of certificates that should be installed onto the virtual machine.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/compute.VaultSecretGroup"
+                    }
+                },
+                "windowsConfiguration": {
+                    "description": "WindowsConfiguration - Specifies Windows operating system settings on the virtual machine.",
+                    "$ref": "#/definitions/compute.WindowsConfiguration"
+                }
+            }
+        },
+        "compute.Plan": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "description": "Name - The plan ID.",
+                    "type": "string"
+                },
+                "product": {
+                    "description": "Product - Specifies the product of the image from the marketplace. This is the same value as Offer under the imageReference element.",
+                    "type": "string"
+                },
+                "promotionCode": {
+                    "description": "PromotionCode - The promotion code.",
+                    "type": "string"
+                },
+                "publisher": {
+                    "description": "Publisher - The publisher ID.",
+                    "type": "string"
+                }
+            }
+        },
+        "compute.SSHConfiguration": {
+            "type": "object",
+            "properties": {
+                "publicKeys": {
+                    "description": "PublicKeys - The list of SSH public keys used to authenticate with linux based VMs.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/compute.SSHPublicKey"
+                    }
+                }
+            }
+        },
+        "compute.SSHPublicKey": {
+            "type": "object",
+            "properties": {
+                "keyData": {
+                    "description": "KeyData - SSH public key certificate used to authenticate with the VM through ssh. The key needs to be at least 2048-bit and in ssh-rsa format. \u003cbr\u003e\u003cbr\u003e For creating ssh keys, see [Create SSH keys on Linux and Mac for Linux VMs in Azure](https://docs.microsoft.com/azure/virtual-machines/virtual-machines-linux-mac-create-ssh-keys?toc=%2fazure%2fvirtual-machines%2flinux%2ftoc.json).",
+                    "type": "string"
+                },
+                "path": {
+                    "description": "Path - Specifies the full path on the created VM where ssh public key is stored. If the file already exists, the specified key is appended to the file. Example: /home/user/.ssh/authorized_keys",
+                    "type": "string"
+                }
+            }
+        },
+        "compute.StorageProfile": {
+            "type": "object",
+            "properties": {
+                "dataDisks": {
+                    "description": "DataDisks - Specifies the parameters that are used to add a data disk to a virtual machine. \u003cbr\u003e\u003cbr\u003e For more information about disks, see [About disks and VHDs for Azure virtual machines](https://docs.microsoft.com/azure/virtual-machines/virtual-machines-windows-about-disks-vhds?toc=%2fazure%2fvirtual-machines%2fwindows%2ftoc.json).",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/compute.DataDisk"
+                    }
+                },
+                "imageReference": {
+                    "description": "ImageReference - Specifies information about the image to use. You can specify information about platform images, marketplace images, or virtual machine images. This element is required when you want to use a platform image, marketplace image, or virtual machine image, but is not used in other creation operations.",
+                    "$ref": "#/definitions/compute.ImageReference"
+                },
+                "osDisk": {
+                    "description": "OsDisk - Specifies information about the operating system disk used by the virtual machine. \u003cbr\u003e\u003cbr\u003e For more information about disks, see [About disks and VHDs for Azure virtual machines](https://docs.microsoft.com/azure/virtual-machines/virtual-machines-windows-about-disks-vhds?toc=%2fazure%2fvirtual-machines%2fwindows%2ftoc.json).",
+                    "$ref": "#/definitions/compute.OSDisk"
+                }
+            }
+        },
+        "compute.SubResource": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "ID - Resource Id",
+                    "type": "string"
+                }
+            }
+        },
+        "compute.VaultCertificate": {
+            "type": "object",
+            "properties": {
+                "certificateStore": {
+                    "description": "CertificateStore - For Windows VMs, specifies the certificate store on the Virtual Machine to which the certificate should be added. The specified certificate store is implicitly in the LocalMachine account. \u003cbr\u003e\u003cbr\u003eFor Linux VMs, the certificate file is placed under the /var/lib/waagent directory, with the file name \u0026lt;UppercaseThumbprint\u0026gt;.crt for the X509 certificate file and \u0026lt;UppercaseThumbprint\u0026gt;.prv for private key. Both of these files are .pem formatted.",
+                    "type": "string"
+                },
+                "certificateUrl": {
+                    "description": "CertificateURL - This is the URL of a certificate that has been uploaded to Key Vault as a secret. For adding a secret to the Key Vault, see [Add a key or secret to the key vault](https://docs.microsoft.com/azure/key-vault/key-vault-get-started/#add). In this case, your certificate needs to be It is the Base64 encoding of the following JSON Object which is encoded in UTF-8: \u003cbr\u003e\u003cbr\u003e {\u003cbr\u003e  \"data\":\"\u003cBase64-encoded-certificate\u003e\",\u003cbr\u003e  \"dataType\":\"pfx\",\u003cbr\u003e  \"password\":\"\u003cpfx-file-password\u003e\"\u003cbr\u003e}",
+                    "type": "string"
+                }
+            }
+        },
+        "compute.VaultSecretGroup": {
+            "type": "object",
+            "properties": {
+                "sourceVault": {
+                    "description": "SourceVault - The relative URL of the Key Vault containing all of the certificates in VaultCertificates.",
+                    "$ref": "#/definitions/compute.SubResource"
+                },
+                "vaultCertificates": {
+                    "description": "VaultCertificates - The list of key vault references in SourceVault which contain certificates.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/compute.VaultCertificate"
+                    }
+                }
+            }
+        },
+        "compute.VirtualHardDisk": {
+            "type": "object",
+            "properties": {
+                "uri": {
+                    "description": "URI - Specifies the virtual hard disk's uri.",
+                    "type": "string"
+                }
+            }
+        },
+        "compute.VirtualMachine": {
+            "type": "object",
+            "properties": {
+                "additionalCapabilities": {
+                    "description": "AdditionalCapabilities - Specifies additional capabilities enabled or disabled on the virtual machine.",
+                    "$ref": "#/definitions/compute.AdditionalCapabilities"
+                },
+                "availabilitySet": {
+                    "description": "AvailabilitySet - Specifies information about the availability set that the virtual machine should be assigned to. Virtual machines specified in the same availability set are allocated to different nodes to maximize availability. For more information about availability sets, see [Manage the availability of virtual machines](https://docs.microsoft.com/azure/virtual-machines/virtual-machines-windows-manage-availability?toc=%2fazure%2fvirtual-machines%2fwindows%2ftoc.json). \u003cbr\u003e\u003cbr\u003e For more information on Azure planned maintenance, see [Planned maintenance for virtual machines in Azure](https://docs.microsoft.com/azure/virtual-machines/virtual-machines-windows-planned-maintenance?toc=%2fazure%2fvirtual-machines%2fwindows%2ftoc.json) \u003cbr\u003e\u003cbr\u003e Currently, a VM can only be added to availability set at creation time. An existing VM cannot be added to an availability set.",
+                    "$ref": "#/definitions/compute.SubResource"
+                },
+                "body": {
+                    "description": "Body represents the response body.\n\nThe response body is streamed on demand as the Body field\nis read. If the network connection fails or the server\nterminates the response, Body.Read calls return an error.\n\nThe http Client and Transport guarantee that Body is always\nnon-nil, even on responses without a body or responses with\na zero-length body. It is the caller's responsibility to\nclose Body. The default HTTP client's Transport may not\nreuse HTTP/1.x \"keep-alive\" TCP connections if the Body is\nnot read to completion and closed.\n\nThe Body is automatically dechunked if the server replied\nwith a \"chunked\" Transfer-Encoding.\n\nAs of Go 1.12, the Body will also implement io.Writer\non a successful \"101 Switching Protocols\" response,\nas used by WebSockets and HTTP/2's \"h2c\" mode."
+                },
+                "close": {
+                    "description": "Close records whether the header directed that the connection be\nclosed after reading Body. The value is advice for clients: neither\nReadResponse nor Response.Write ever closes a connection.",
+                    "type": "boolean"
+                },
+                "contentLength": {
+                    "description": "ContentLength records the length of the associated content. The\nvalue -1 indicates that the length is unknown. Unless Request.Method\nis \"HEAD\", values \u003e= 0 indicate that the given number of bytes may\nbe read from Body.",
+                    "type": "integer"
+                },
+                "diagnosticsProfile": {
+                    "description": "DiagnosticsProfile - Specifies the boot diagnostic settings state. \u003cbr\u003e\u003cbr\u003eMinimum api-version: 2015-06-15.",
+                    "$ref": "#/definitions/compute.DiagnosticsProfile"
+                },
+                "hardwareProfile": {
+                    "description": "HardwareProfile - Specifies the hardware settings for the virtual machine.",
+                    "$ref": "#/definitions/compute.HardwareProfile"
+                },
+                "header": {
+                    "description": "Header maps header keys to values. If the response had multiple\nheaders with the same key, they may be concatenated, with comma\ndelimiters.  (RFC 7230, section 3.2.2 requires that multiple headers\nbe semantically equivalent to a comma-delimited sequence.) When\nHeader values are duplicated by other fields in this struct (e.g.,\nContentLength, TransferEncoding, Trailer), the field values are\nauthoritative.\n\nKeys in the map are canonicalized (see CanonicalHeaderKey).",
+                    "$ref": "#/definitions/http.Header"
+                },
+                "id": {
+                    "description": "ID - READ-ONLY; Resource Id",
+                    "type": "string"
+                },
+                "identity": {
+                    "description": "Identity - The identity of the virtual machine, if configured.",
+                    "$ref": "#/definitions/compute.VirtualMachineIdentity"
+                },
+                "instanceView": {
+                    "description": "InstanceView - READ-ONLY; The virtual machine instance view.",
+                    "$ref": "#/definitions/compute.VirtualMachineInstanceView"
+                },
+                "licenseType": {
+                    "description": "LicenseType - Specifies that the image or disk that is being used was licensed on-premises. This element is only used for images that contain the Windows Server operating system. \u003cbr\u003e\u003cbr\u003e Possible values are: \u003cbr\u003e\u003cbr\u003e Windows_Client \u003cbr\u003e\u003cbr\u003e Windows_Server \u003cbr\u003e\u003cbr\u003e If this element is included in a request for an update, the value must match the initial value. This value cannot be updated. \u003cbr\u003e\u003cbr\u003e For more information, see [Azure Hybrid Use Benefit for Windows Server](https://docs.microsoft.com/azure/virtual-machines/virtual-machines-windows-hybrid-use-benefit-licensing?toc=%2fazure%2fvirtual-machines%2fwindows%2ftoc.json) \u003cbr\u003e\u003cbr\u003e Minimum api-version: 2015-06-15",
+                    "type": "string"
+                },
+                "location": {
+                    "description": "Location - Resource location",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "Name - READ-ONLY; Resource name",
+                    "type": "string"
+                },
+                "networkProfile": {
+                    "description": "NetworkProfile - Specifies the network interfaces of the virtual machine.",
+                    "$ref": "#/definitions/compute.NetworkProfile"
+                },
+                "osProfile": {
+                    "description": "OsProfile - Specifies the operating system settings for the virtual machine.",
+                    "$ref": "#/definitions/compute.OSProfile"
+                },
+                "plan": {
+                    "description": "Plan - Specifies information about the marketplace image used to create the virtual machine. This element is only used for marketplace images. Before you can use a marketplace image from an API, you must enable the image for programmatic use.  In the Azure portal, find the marketplace image that you want to use and then click **Want to deploy programmatically, Get Started -\u003e**. Enter any required information and then click **Save**.",
+                    "$ref": "#/definitions/compute.Plan"
+                },
+                "proto": {
+                    "description": "e.g. \"HTTP/1.0\"",
+                    "type": "string"
+                },
+                "protoMajor": {
+                    "description": "e.g. 1",
+                    "type": "integer"
+                },
+                "protoMinor": {
+                    "description": "e.g. 0",
+                    "type": "integer"
+                },
+                "provisioningState": {
+                    "description": "ProvisioningState - READ-ONLY; The provisioning state, which only appears in the response.",
+                    "type": "string"
+                },
+                "proximityPlacementGroup": {
+                    "description": "ProximityPlacementGroup - Specifies information about the proximity placement group that the virtual machine should be assigned to. \u003cbr\u003e\u003cbr\u003eMinimum api-version: 2018-04-01.",
+                    "$ref": "#/definitions/compute.SubResource"
+                },
+                "request": {
+                    "description": "Request is the request that was sent to obtain this Response.\nRequest's Body is nil (having already been consumed).\nThis is only populated for Client requests.",
+                    "$ref": "#/definitions/http.Request"
+                },
+                "resources": {
+                    "description": "Resources - READ-ONLY; The virtual machine child extension resources.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/compute.VirtualMachineExtension"
+                    }
+                },
+                "status": {
+                    "description": "e.g. \"200 OK\"",
+                    "type": "string"
+                },
+                "statusCode": {
+                    "description": "e.g. 200",
+                    "type": "integer"
+                },
+                "storageProfile": {
+                    "description": "StorageProfile - Specifies the storage settings for the virtual machine disks.",
+                    "$ref": "#/definitions/compute.StorageProfile"
+                },
+                "tags": {
+                    "description": "Tags - Resource tags",
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
+                "tls": {
+                    "description": "TLS contains information about the TLS connection on which the\nresponse was received. It is nil for unencrypted responses.\nThe pointer is shared between responses and should not be\nmodified.",
+                    "$ref": "#/definitions/tls.ConnectionState"
+                },
+                "trailer": {
+                    "description": "Trailer maps trailer keys to values in the same\nformat as Header.\n\nThe Trailer initially contains only nil values, one for\neach key specified in the server's \"Trailer\" header\nvalue. Those values are not added to Header.\n\nTrailer must not be accessed concurrently with Read calls\non the Body.\n\nAfter Body.Read has returned io.EOF, Trailer will contain\nany trailer values sent by the server.",
+                    "$ref": "#/definitions/http.Header"
+                },
+                "transferEncoding": {
+                    "description": "Contains transfer encodings from outer-most to inner-most. Value is\nnil, means that \"identity\" encoding is used.",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "type": {
+                    "description": "Type - READ-ONLY; Resource type",
+                    "type": "string"
+                },
+                "uncompressed": {
+                    "description": "Uncompressed reports whether the response was sent compressed but\nwas decompressed by the http package. When true, reading from\nBody yields the uncompressed content instead of the compressed\ncontent actually set from the server, ContentLength is set to -1,\nand the \"Content-Length\" and \"Content-Encoding\" fields are deleted\nfrom the responseHeader. To get the original response from\nthe server, set Transport.DisableCompression to true.",
+                    "type": "boolean"
+                },
+                "vmId": {
+                    "description": "VMID - READ-ONLY; Specifies the VM unique ID which is a 128-bits identifier that is encoded and stored in all Azure IaaS VMs SMBIOS and can be read using platform BIOS commands.",
+                    "type": "string"
+                },
+                "zones": {
+                    "description": "Zones - The virtual machine zones.",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "compute.VirtualMachineAgentInstanceView": {
+            "type": "object",
+            "properties": {
+                "extensionHandlers": {
+                    "description": "ExtensionHandlers - The virtual machine extension handler instance view.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/compute.VirtualMachineExtensionHandlerInstanceView"
+                    }
+                },
+                "statuses": {
+                    "description": "Statuses - The resource status information.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/compute.InstanceViewStatus"
+                    }
+                },
+                "vmAgentVersion": {
+                    "description": "VMAgentVersion - The VM Agent full version.",
+                    "type": "string"
+                }
+            }
+        },
+        "compute.VirtualMachineExtension": {
+            "type": "object",
+            "properties": {
+                "autoUpgradeMinorVersion": {
+                    "description": "AutoUpgradeMinorVersion - Indicates whether the extension should use a newer minor version if one is available at deployment time. Once deployed, however, the extension will not upgrade minor versions unless redeployed, even with this property set to true.",
+                    "type": "boolean"
+                },
+                "body": {
+                    "description": "Body represents the response body.\n\nThe response body is streamed on demand as the Body field\nis read. If the network connection fails or the server\nterminates the response, Body.Read calls return an error.\n\nThe http Client and Transport guarantee that Body is always\nnon-nil, even on responses without a body or responses with\na zero-length body. It is the caller's responsibility to\nclose Body. The default HTTP client's Transport may not\nreuse HTTP/1.x \"keep-alive\" TCP connections if the Body is\nnot read to completion and closed.\n\nThe Body is automatically dechunked if the server replied\nwith a \"chunked\" Transfer-Encoding.\n\nAs of Go 1.12, the Body will also implement io.Writer\non a successful \"101 Switching Protocols\" response,\nas used by WebSockets and HTTP/2's \"h2c\" mode."
+                },
+                "close": {
+                    "description": "Close records whether the header directed that the connection be\nclosed after reading Body. The value is advice for clients: neither\nReadResponse nor Response.Write ever closes a connection.",
+                    "type": "boolean"
+                },
+                "contentLength": {
+                    "description": "ContentLength records the length of the associated content. The\nvalue -1 indicates that the length is unknown. Unless Request.Method\nis \"HEAD\", values \u003e= 0 indicate that the given number of bytes may\nbe read from Body.",
+                    "type": "integer"
+                },
+                "forceUpdateTag": {
+                    "description": "ForceUpdateTag - How the extension handler should be forced to update even if the extension configuration has not changed.",
+                    "type": "string"
+                },
+                "header": {
+                    "description": "Header maps header keys to values. If the response had multiple\nheaders with the same key, they may be concatenated, with comma\ndelimiters.  (RFC 7230, section 3.2.2 requires that multiple headers\nbe semantically equivalent to a comma-delimited sequence.) When\nHeader values are duplicated by other fields in this struct (e.g.,\nContentLength, TransferEncoding, Trailer), the field values are\nauthoritative.\n\nKeys in the map are canonicalized (see CanonicalHeaderKey).",
+                    "$ref": "#/definitions/http.Header"
+                },
+                "id": {
+                    "description": "ID - READ-ONLY; Resource Id",
+                    "type": "string"
+                },
+                "instanceView": {
+                    "description": "InstanceView - The virtual machine extension instance view.",
+                    "$ref": "#/definitions/compute.VirtualMachineExtensionInstanceView"
+                },
+                "location": {
+                    "description": "Location - Resource location",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "Name - READ-ONLY; Resource name",
+                    "type": "string"
+                },
+                "protectedSettings": {
+                    "description": "ProtectedSettings - The extension can contain either protectedSettings or protectedSettingsFromKeyVault or no protected settings at all."
+                },
+                "proto": {
+                    "description": "e.g. \"HTTP/1.0\"",
+                    "type": "string"
+                },
+                "protoMajor": {
+                    "description": "e.g. 1",
+                    "type": "integer"
+                },
+                "protoMinor": {
+                    "description": "e.g. 0",
+                    "type": "integer"
+                },
+                "provisioningState": {
+                    "description": "ProvisioningState - READ-ONLY; The provisioning state, which only appears in the response.",
+                    "type": "string"
+                },
+                "publisher": {
+                    "description": "Publisher - The name of the extension handler publisher.",
+                    "type": "string"
+                },
+                "request": {
+                    "description": "Request is the request that was sent to obtain this Response.\nRequest's Body is nil (having already been consumed).\nThis is only populated for Client requests.",
+                    "$ref": "#/definitions/http.Request"
+                },
+                "settings": {
+                    "description": "Settings - Json formatted public settings for the extension."
+                },
+                "status": {
+                    "description": "e.g. \"200 OK\"",
+                    "type": "string"
+                },
+                "statusCode": {
+                    "description": "e.g. 200",
+                    "type": "integer"
+                },
+                "tags": {
+                    "description": "Tags - Resource tags",
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
+                "tls": {
+                    "description": "TLS contains information about the TLS connection on which the\nresponse was received. It is nil for unencrypted responses.\nThe pointer is shared between responses and should not be\nmodified.",
+                    "$ref": "#/definitions/tls.ConnectionState"
+                },
+                "trailer": {
+                    "description": "Trailer maps trailer keys to values in the same\nformat as Header.\n\nThe Trailer initially contains only nil values, one for\neach key specified in the server's \"Trailer\" header\nvalue. Those values are not added to Header.\n\nTrailer must not be accessed concurrently with Read calls\non the Body.\n\nAfter Body.Read has returned io.EOF, Trailer will contain\nany trailer values sent by the server.",
+                    "$ref": "#/definitions/http.Header"
+                },
+                "transferEncoding": {
+                    "description": "Contains transfer encodings from outer-most to inner-most. Value is\nnil, means that \"identity\" encoding is used.",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "type": {
+                    "description": "Type - READ-ONLY; Resource type",
+                    "type": "string"
+                },
+                "typeHandlerVersion": {
+                    "description": "TypeHandlerVersion - Specifies the version of the script handler.",
+                    "type": "string"
+                },
+                "uncompressed": {
+                    "description": "Uncompressed reports whether the response was sent compressed but\nwas decompressed by the http package. When true, reading from\nBody yields the uncompressed content instead of the compressed\ncontent actually set from the server, ContentLength is set to -1,\nand the \"Content-Length\" and \"Content-Encoding\" fields are deleted\nfrom the responseHeader. To get the original response from\nthe server, set Transport.DisableCompression to true.",
+                    "type": "boolean"
+                }
+            }
+        },
+        "compute.VirtualMachineExtensionHandlerInstanceView": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "description": "Status - The extension handler status.",
+                    "$ref": "#/definitions/compute.InstanceViewStatus"
+                },
+                "type": {
+                    "description": "Type - Specifies the type of the extension; an example is \"CustomScriptExtension\".",
+                    "type": "string"
+                },
+                "typeHandlerVersion": {
+                    "description": "TypeHandlerVersion - Specifies the version of the script handler.",
+                    "type": "string"
+                }
+            }
+        },
+        "compute.VirtualMachineExtensionInstanceView": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "description": "Name - The virtual machine extension name.",
+                    "type": "string"
+                },
+                "statuses": {
+                    "description": "Statuses - The resource status information.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/compute.InstanceViewStatus"
+                    }
+                },
+                "substatuses": {
+                    "description": "Substatuses - The resource status information.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/compute.InstanceViewStatus"
+                    }
+                },
+                "type": {
+                    "description": "Type - Specifies the type of the extension; an example is \"CustomScriptExtension\".",
+                    "type": "string"
+                },
+                "typeHandlerVersion": {
+                    "description": "TypeHandlerVersion - Specifies the version of the script handler.",
+                    "type": "string"
+                }
+            }
+        },
+        "compute.VirtualMachineIdentity": {
+            "type": "object",
+            "properties": {
+                "principalId": {
+                    "description": "PrincipalID - READ-ONLY; The principal id of virtual machine identity. This property will only be provided for a system assigned identity.",
+                    "type": "string"
+                },
+                "tenantId": {
+                    "description": "TenantID - READ-ONLY; The tenant id associated with the virtual machine. This property will only be provided for a system assigned identity.",
+                    "type": "string"
+                },
+                "type": {
+                    "description": "Type - The type of identity used for the virtual machine. The type 'SystemAssigned, UserAssigned' includes both an implicitly created identity and a set of user assigned identities. The type 'None' will remove any identities from the virtual machine. Possible values include: 'ResourceIdentityTypeSystemAssigned', 'ResourceIdentityTypeUserAssigned', 'ResourceIdentityTypeSystemAssignedUserAssigned', 'ResourceIdentityTypeNone'",
+                    "type": "string"
+                },
+                "userAssignedIdentities": {
+                    "description": "UserAssignedIdentities - The list of user identities associated with the Virtual Machine. The user identity dictionary key references will be ARM resource ids in the form: '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ManagedIdentity/userAssignedIdentities/{identityName}'.",
+                    "type": "object",
+                    "additionalProperties": {
+                        "$ref": "#/definitions/compute.VirtualMachineIdentityUserAssignedIdentitiesValue"
+                    }
+                }
+            }
+        },
+        "compute.VirtualMachineIdentityUserAssignedIdentitiesValue": {
+            "type": "object",
+            "properties": {
+                "clientId": {
+                    "description": "ClientID - READ-ONLY; The client id of user assigned identity.",
+                    "type": "string"
+                },
+                "principalId": {
+                    "description": "PrincipalID - READ-ONLY; The principal id of user assigned identity.",
+                    "type": "string"
+                }
+            }
+        },
+        "compute.VirtualMachineInstanceView": {
+            "type": "object",
+            "properties": {
+                "body": {
+                    "description": "Body represents the response body.\n\nThe response body is streamed on demand as the Body field\nis read. If the network connection fails or the server\nterminates the response, Body.Read calls return an error.\n\nThe http Client and Transport guarantee that Body is always\nnon-nil, even on responses without a body or responses with\na zero-length body. It is the caller's responsibility to\nclose Body. The default HTTP client's Transport may not\nreuse HTTP/1.x \"keep-alive\" TCP connections if the Body is\nnot read to completion and closed.\n\nThe Body is automatically dechunked if the server replied\nwith a \"chunked\" Transfer-Encoding.\n\nAs of Go 1.12, the Body will also implement io.Writer\non a successful \"101 Switching Protocols\" response,\nas used by WebSockets and HTTP/2's \"h2c\" mode."
+                },
+                "bootDiagnostics": {
+                    "description": "BootDiagnostics - Boot Diagnostics is a debugging feature which allows you to view Console Output and Screenshot to diagnose VM status. \u003cbr\u003e\u003cbr\u003e You can easily view the output of your console log. \u003cbr\u003e\u003cbr\u003e Azure also enables you to see a screenshot of the VM from the hypervisor.",
+                    "$ref": "#/definitions/compute.BootDiagnosticsInstanceView"
+                },
+                "close": {
+                    "description": "Close records whether the header directed that the connection be\nclosed after reading Body. The value is advice for clients: neither\nReadResponse nor Response.Write ever closes a connection.",
+                    "type": "boolean"
+                },
+                "computerName": {
+                    "description": "ComputerName - The computer name assigned to the virtual machine.",
+                    "type": "string"
+                },
+                "contentLength": {
+                    "description": "ContentLength records the length of the associated content. The\nvalue -1 indicates that the length is unknown. Unless Request.Method\nis \"HEAD\", values \u003e= 0 indicate that the given number of bytes may\nbe read from Body.",
+                    "type": "integer"
+                },
+                "disks": {
+                    "description": "Disks - The virtual machine disk information.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/compute.DiskInstanceView"
+                    }
+                },
+                "extensions": {
+                    "description": "Extensions - The extensions information.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/compute.VirtualMachineExtensionInstanceView"
+                    }
+                },
+                "header": {
+                    "description": "Header maps header keys to values. If the response had multiple\nheaders with the same key, they may be concatenated, with comma\ndelimiters.  (RFC 7230, section 3.2.2 requires that multiple headers\nbe semantically equivalent to a comma-delimited sequence.) When\nHeader values are duplicated by other fields in this struct (e.g.,\nContentLength, TransferEncoding, Trailer), the field values are\nauthoritative.\n\nKeys in the map are canonicalized (see CanonicalHeaderKey).",
+                    "$ref": "#/definitions/http.Header"
+                },
+                "maintenanceRedeployStatus": {
+                    "description": "MaintenanceRedeployStatus - The Maintenance Operation status on the virtual machine.",
+                    "$ref": "#/definitions/compute.MaintenanceRedeployStatus"
+                },
+                "osName": {
+                    "description": "OsName - The Operating System running on the virtual machine.",
+                    "type": "string"
+                },
+                "osVersion": {
+                    "description": "OsVersion - The version of Operating System running on the virtual machine.",
+                    "type": "string"
+                },
+                "platformFaultDomain": {
+                    "description": "PlatformFaultDomain - Specifies the fault domain of the virtual machine.",
+                    "type": "integer"
+                },
+                "platformUpdateDomain": {
+                    "description": "PlatformUpdateDomain - Specifies the update domain of the virtual machine.",
+                    "type": "integer"
+                },
+                "proto": {
+                    "description": "e.g. \"HTTP/1.0\"",
+                    "type": "string"
+                },
+                "protoMajor": {
+                    "description": "e.g. 1",
+                    "type": "integer"
+                },
+                "protoMinor": {
+                    "description": "e.g. 0",
+                    "type": "integer"
+                },
+                "rdpThumbPrint": {
+                    "description": "RdpThumbPrint - The Remote desktop certificate thumbprint.",
+                    "type": "string"
+                },
+                "request": {
+                    "description": "Request is the request that was sent to obtain this Response.\nRequest's Body is nil (having already been consumed).\nThis is only populated for Client requests.",
+                    "$ref": "#/definitions/http.Request"
+                },
+                "status": {
+                    "description": "e.g. \"200 OK\"",
+                    "type": "string"
+                },
+                "statusCode": {
+                    "description": "e.g. 200",
+                    "type": "integer"
+                },
+                "statuses": {
+                    "description": "Statuses - The resource status information.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/compute.InstanceViewStatus"
+                    }
+                },
+                "tls": {
+                    "description": "TLS contains information about the TLS connection on which the\nresponse was received. It is nil for unencrypted responses.\nThe pointer is shared between responses and should not be\nmodified.",
+                    "$ref": "#/definitions/tls.ConnectionState"
+                },
+                "trailer": {
+                    "description": "Trailer maps trailer keys to values in the same\nformat as Header.\n\nThe Trailer initially contains only nil values, one for\neach key specified in the server's \"Trailer\" header\nvalue. Those values are not added to Header.\n\nTrailer must not be accessed concurrently with Read calls\non the Body.\n\nAfter Body.Read has returned io.EOF, Trailer will contain\nany trailer values sent by the server.",
+                    "$ref": "#/definitions/http.Header"
+                },
+                "transferEncoding": {
+                    "description": "Contains transfer encodings from outer-most to inner-most. Value is\nnil, means that \"identity\" encoding is used.",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "uncompressed": {
+                    "description": "Uncompressed reports whether the response was sent compressed but\nwas decompressed by the http package. When true, reading from\nBody yields the uncompressed content instead of the compressed\ncontent actually set from the server, ContentLength is set to -1,\nand the \"Content-Length\" and \"Content-Encoding\" fields are deleted\nfrom the responseHeader. To get the original response from\nthe server, set Transport.DisableCompression to true.",
+                    "type": "boolean"
+                },
+                "vmAgent": {
+                    "description": "VMAgent - The VM Agent running on the virtual machine.",
+                    "$ref": "#/definitions/compute.VirtualMachineAgentInstanceView"
+                }
+            }
+        },
+        "compute.WinRMConfiguration": {
+            "type": "object",
+            "properties": {
+                "listeners": {
+                    "description": "Listeners - The list of Windows Remote Management listeners",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/compute.WinRMListener"
+                    }
+                }
+            }
+        },
+        "compute.WinRMListener": {
+            "type": "object",
+            "properties": {
+                "certificateUrl": {
+                    "description": "CertificateURL - This is the URL of a certificate that has been uploaded to Key Vault as a secret. For adding a secret to the Key Vault, see [Add a key or secret to the key vault](https://docs.microsoft.com/azure/key-vault/key-vault-get-started/#add). In this case, your certificate needs to be It is the Base64 encoding of the following JSON Object which is encoded in UTF-8: \u003cbr\u003e\u003cbr\u003e {\u003cbr\u003e  \"data\":\"\u003cBase64-encoded-certificate\u003e\",\u003cbr\u003e  \"dataType\":\"pfx\",\u003cbr\u003e  \"password\":\"\u003cpfx-file-password\u003e\"\u003cbr\u003e}",
+                    "type": "string"
+                },
+                "protocol": {
+                    "description": "Protocol - Specifies the protocol of listener. \u003cbr\u003e\u003cbr\u003e Possible values are: \u003cbr\u003e**http** \u003cbr\u003e\u003cbr\u003e **https**. Possible values include: 'HTTP', 'HTTPS'",
+                    "type": "string"
+                }
+            }
+        },
+        "compute.WindowsConfiguration": {
+            "type": "object",
+            "properties": {
+                "additionalUnattendContent": {
+                    "description": "AdditionalUnattendContent - Specifies additional base-64 encoded XML formatted information that can be included in the Unattend.xml file, which is used by Windows Setup.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/compute.AdditionalUnattendContent"
+                    }
+                },
+                "enableAutomaticUpdates": {
+                    "description": "EnableAutomaticUpdates - Indicates whether virtual machine is enabled for automatic updates.",
+                    "type": "boolean"
+                },
+                "provisionVMAgent": {
+                    "description": "ProvisionVMAgent - Indicates whether virtual machine agent should be provisioned on the virtual machine. \u003cbr\u003e\u003cbr\u003e When this property is not specified in the request body, default behavior is to set it to true.  This will ensure that VM Agent is installed on the VM so that extensions can be added to the VM later.",
+                    "type": "boolean"
+                },
+                "timeZone": {
+                    "description": "TimeZone - Specifies the time zone of the virtual machine. e.g. \"Pacific Standard Time\"",
+                    "type": "string"
+                },
+                "winRM": {
+                    "description": "WinRM - Specifies the Windows Remote Management listeners. This enables remote Windows PowerShell.",
+                    "$ref": "#/definitions/compute.WinRMConfiguration"
+                }
+            }
+        },
+        "http.Header": {
+            "type": "object",
+            "additionalProperties": {
+                "type": "array",
+                "items": {
+                    "type": "string"
+                }
+            }
+        },
+        "http.Request": {
+            "type": "object",
+            "properties": {
+                "body": {
+                    "description": "Body is the request's body.\n\nFor client requests, a nil body means the request has no\nbody, such as a GET request. The HTTP Client's Transport\nis responsible for calling the Close method.\n\nFor server requests, the Request Body is always non-nil\nbut will return EOF immediately when no body is present.\nThe Server will close the request body. The ServeHTTP\nHandler does not need to.\n\nBody must allow Read to be called concurrently with Close.\nIn particular, calling Close should unblock a Read waiting\nfor input."
+                },
+                "cancel": {
+                    "description": "Cancel is an optional channel whose closure indicates that the client\nrequest should be regarded as canceled. Not all implementations of\nRoundTripper may support Cancel.\n\nFor server requests, this field is not applicable.\n\nDeprecated: Set the Request's context with NewRequestWithContext\ninstead. If a Request's Cancel field and context are both\nset, it is undefined whether Cancel is respected.",
+                    "type": "object"
+                },
+                "close": {
+                    "description": "Close indicates whether to close the connection after\nreplying to this request (for servers) or after sending this\nrequest and reading its response (for clients).\n\nFor server requests, the HTTP server handles this automatically\nand this field is not needed by Handlers.\n\nFor client requests, setting this field prevents re-use of\nTCP connections between requests to the same hosts, as if\nTransport.DisableKeepAlives were set.",
+                    "type": "boolean"
+                },
+                "contentLength": {
+                    "description": "ContentLength records the length of the associated content.\nThe value -1 indicates that the length is unknown.\nValues \u003e= 0 indicate that the given number of bytes may\nbe read from Body.\n\nFor client requests, a value of 0 with a non-nil Body is\nalso treated as unknown.",
+                    "type": "integer"
+                },
+                "form": {
+                    "description": "Form contains the parsed form data, including both the URL\nfield's query parameters and the PATCH, POST, or PUT form data.\nThis field is only available after ParseForm is called.\nThe HTTP client ignores Form and uses Body instead.",
+                    "$ref": "#/definitions/url.Values"
+                },
+                "header": {
+                    "description": "Header contains the request header fields either received\nby the server or to be sent by the client.\n\nIf a server received a request with header lines,\n\n\tHost: example.com\n\taccept-encoding: gzip, deflate\n\tAccept-Language: en-us\n\tfOO: Bar\n\tfoo: two\n\nthen\n\n\tHeader = map[string][]string{\n\t\t\"Accept-Encoding\": {\"gzip, deflate\"},\n\t\t\"Accept-Language\": {\"en-us\"},\n\t\t\"Foo\": {\"Bar\", \"two\"},\n\t}\n\nFor incoming requests, the Host header is promoted to the\nRequest.Host field and removed from the Header map.\n\nHTTP defines that header names are case-insensitive. The\nrequest parser implements this by using CanonicalHeaderKey,\nmaking the first character and any characters following a\nhyphen uppercase and the rest lowercase.\n\nFor client requests, certain headers such as Content-Length\nand Connection are automatically written when needed and\nvalues in Header may be ignored. See the documentation\nfor the Request.Write method.",
+                    "$ref": "#/definitions/http.Header"
+                },
+                "host": {
+                    "description": "For server requests, Host specifies the host on which the\nURL is sought. For HTTP/1 (per RFC 7230, section 5.4), this\nis either the value of the \"Host\" header or the host name\ngiven in the URL itself. For HTTP/2, it is the value of the\n\":authority\" pseudo-header field.\nIt may be of the form \"host:port\". For international domain\nnames, Host may be in Punycode or Unicode form. Use\ngolang.org/x/net/idna to convert it to either format if\nneeded.\nTo prevent DNS rebinding attacks, server Handlers should\nvalidate that the Host header has a value for which the\nHandler considers itself authoritative. The included\nServeMux supports patterns registered to particular host\nnames and thus protects its registered Handlers.\n\nFor client requests, Host optionally overrides the Host\nheader to send. If empty, the Request.Write method uses\nthe value of URL.Host. Host may contain an international\ndomain name.",
+                    "type": "string"
+                },
+                "method": {
+                    "description": "Method specifies the HTTP method (GET, POST, PUT, etc.).\nFor client requests, an empty string means GET.\n\nGo's HTTP client does not support sending a request with\nthe CONNECT method. See the documentation on Transport for\ndetails.",
+                    "type": "string"
+                },
+                "multipartForm": {
+                    "description": "MultipartForm is the parsed multipart form, including file uploads.\nThis field is only available after ParseMultipartForm is called.\nThe HTTP client ignores MultipartForm and uses Body instead.",
+                    "$ref": "#/definitions/multipart.Form"
+                },
+                "postForm": {
+                    "description": "PostForm contains the parsed form data from PATCH, POST\nor PUT body parameters.\n\nThis field is only available after ParseForm is called.\nThe HTTP client ignores PostForm and uses Body instead.",
+                    "$ref": "#/definitions/url.Values"
+                },
+                "proto": {
+                    "description": "The protocol version for incoming server requests.\n\nFor client requests, these fields are ignored. The HTTP\nclient code always uses either HTTP/1.1 or HTTP/2.\nSee the docs on Transport for details.",
+                    "type": "string"
+                },
+                "protoMajor": {
+                    "description": "1",
+                    "type": "integer"
+                },
+                "protoMinor": {
+                    "description": "0",
+                    "type": "integer"
+                },
+                "remoteAddr": {
+                    "description": "RemoteAddr allows HTTP servers and other software to record\nthe network address that sent the request, usually for\nlogging. This field is not filled in by ReadRequest and\nhas no defined format. The HTTP server in this package\nsets RemoteAddr to an \"IP:port\" address before invoking a\nhandler.\nThis field is ignored by the HTTP client.",
+                    "type": "string"
+                },
+                "requestURI": {
+                    "description": "RequestURI is the unmodified request-target of the\nRequest-Line (RFC 7230, Section 3.1.1) as sent by the client\nto a server. Usually the URL field should be used instead.\nIt is an error to set this field in an HTTP client request.",
+                    "type": "string"
+                },
+                "response": {
+                    "description": "Response is the redirect response which caused this request\nto be created. This field is only populated during client\nredirects.",
+                    "$ref": "#/definitions/http.Response"
+                },
+                "tls": {
+                    "description": "TLS allows HTTP servers and other software to record\ninformation about the TLS connection on which the request\nwas received. This field is not filled in by ReadRequest.\nThe HTTP server in this package sets the field for\nTLS-enabled connections before invoking a handler;\notherwise it leaves the field nil.\nThis field is ignored by the HTTP client.",
+                    "$ref": "#/definitions/tls.ConnectionState"
+                },
+                "trailer": {
+                    "description": "Trailer specifies additional headers that are sent after the request\nbody.\n\nFor server requests, the Trailer map initially contains only the\ntrailer keys, with nil values. (The client declares which trailers it\nwill later send.)  While the handler is reading from Body, it must\nnot reference Trailer. After reading from Body returns EOF, Trailer\ncan be read again and will contain non-nil values, if they were sent\nby the client.\n\nFor client requests, Trailer must be initialized to a map containing\nthe trailer keys to later send. The values may be nil or their final\nvalues. The ContentLength must be 0 or -1, to send a chunked request.\nAfter the HTTP request is sent the map values can be updated while\nthe request body is read. Once the body returns EOF, the caller must\nnot mutate Trailer.\n\nFew HTTP clients, servers, or proxies support HTTP trailers.",
+                    "$ref": "#/definitions/http.Header"
+                },
+                "transferEncoding": {
+                    "description": "TransferEncoding lists the transfer encodings from outermost to\ninnermost. An empty list denotes the \"identity\" encoding.\nTransferEncoding can usually be ignored; chunked encoding is\nautomatically added and removed as necessary when sending and\nreceiving requests.",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "url": {
+                    "description": "URL specifies either the URI being requested (for server\nrequests) or the URL to access (for client requests).\n\nFor server requests, the URL is parsed from the URI\nsupplied on the Request-Line as stored in RequestURI.  For\nmost requests, fields other than Path and RawQuery will be\nempty. (See RFC 7230, Section 5.3)\n\nFor client requests, the URL's Host specifies the server to\nconnect to, while the Request's Host field optionally\nspecifies the Host header value to send in the HTTP\nrequest.",
+                    "$ref": "#/definitions/url.URL"
+                }
+            }
+        },
+        "http.Response": {
+            "type": "object",
+            "properties": {
+                "body": {
+                    "description": "Body represents the response body.\n\nThe response body is streamed on demand as the Body field\nis read. If the network connection fails or the server\nterminates the response, Body.Read calls return an error.\n\nThe http Client and Transport guarantee that Body is always\nnon-nil, even on responses without a body or responses with\na zero-length body. It is the caller's responsibility to\nclose Body. The default HTTP client's Transport may not\nreuse HTTP/1.x \"keep-alive\" TCP connections if the Body is\nnot read to completion and closed.\n\nThe Body is automatically dechunked if the server replied\nwith a \"chunked\" Transfer-Encoding.\n\nAs of Go 1.12, the Body will also implement io.Writer\non a successful \"101 Switching Protocols\" response,\nas used by WebSockets and HTTP/2's \"h2c\" mode."
+                },
+                "close": {
+                    "description": "Close records whether the header directed that the connection be\nclosed after reading Body. The value is advice for clients: neither\nReadResponse nor Response.Write ever closes a connection.",
+                    "type": "boolean"
+                },
+                "contentLength": {
+                    "description": "ContentLength records the length of the associated content. The\nvalue -1 indicates that the length is unknown. Unless Request.Method\nis \"HEAD\", values \u003e= 0 indicate that the given number of bytes may\nbe read from Body.",
+                    "type": "integer"
+                },
+                "header": {
+                    "description": "Header maps header keys to values. If the response had multiple\nheaders with the same key, they may be concatenated, with comma\ndelimiters.  (RFC 7230, section 3.2.2 requires that multiple headers\nbe semantically equivalent to a comma-delimited sequence.) When\nHeader values are duplicated by other fields in this struct (e.g.,\nContentLength, TransferEncoding, Trailer), the field values are\nauthoritative.\n\nKeys in the map are canonicalized (see CanonicalHeaderKey).",
+                    "$ref": "#/definitions/http.Header"
+                },
+                "proto": {
+                    "description": "e.g. \"HTTP/1.0\"",
+                    "type": "string"
+                },
+                "protoMajor": {
+                    "description": "e.g. 1",
+                    "type": "integer"
+                },
+                "protoMinor": {
+                    "description": "e.g. 0",
+                    "type": "integer"
+                },
+                "request": {
+                    "description": "Request is the request that was sent to obtain this Response.\nRequest's Body is nil (having already been consumed).\nThis is only populated for Client requests.",
+                    "$ref": "#/definitions/http.Request"
+                },
+                "status": {
+                    "description": "e.g. \"200 OK\"",
+                    "type": "string"
+                },
+                "statusCode": {
+                    "description": "e.g. 200",
+                    "type": "integer"
+                },
+                "tls": {
+                    "description": "TLS contains information about the TLS connection on which the\nresponse was received. It is nil for unencrypted responses.\nThe pointer is shared between responses and should not be\nmodified.",
+                    "$ref": "#/definitions/tls.ConnectionState"
+                },
+                "trailer": {
+                    "description": "Trailer maps trailer keys to values in the same\nformat as Header.\n\nThe Trailer initially contains only nil values, one for\neach key specified in the server's \"Trailer\" header\nvalue. Those values are not added to Header.\n\nTrailer must not be accessed concurrently with Read calls\non the Body.\n\nAfter Body.Read has returned io.EOF, Trailer will contain\nany trailer values sent by the server.",
+                    "$ref": "#/definitions/http.Header"
+                },
+                "transferEncoding": {
+                    "description": "Contains transfer encodings from outer-most to inner-most. Value is\nnil, means that \"identity\" encoding is used.",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "uncompressed": {
+                    "description": "Uncompressed reports whether the response was sent compressed but\nwas decompressed by the http package. When true, reading from\nBody yields the uncompressed content instead of the compressed\ncontent actually set from the server, ContentLength is set to -1,\nand the \"Content-Length\" and \"Content-Encoding\" fields are deleted\nfrom the responseHeader. To get the original response from\nthe server, set Transport.DisableCompression to true.",
+                    "type": "boolean"
+                }
+            }
+        },
+        "main.attribute": {
+            "type": "object",
+            "properties": {
+                "Key": {
+                    "type": "string"
+                },
+                "Value": {
+                    "type": "string"
+                }
+            }
+        },
+        "main.commonAttibutes": {
+            "type": "object",
+            "properties": {
+                "AssetType": {
+                    "description": "When the data was ingested",
+                    "type": "string"
+                },
+                "CustomerId": {
+                    "description": "The customer that owns the data unique identifier",
+                    "type": "integer"
+                },
+                "DltaAssetId": {
+                    "description": "Our unique identifier",
+                    "type": "integer"
+                },
+                "IngestionTime": {
+                    "description": "When the data was ingested",
+                    "type": "string"
+                },
+                "Name": {
+                    "description": "What the name is fhe",
+                    "type": "string"
+                },
+                "Platform": {
+                    "description": "The project that applied the rules",
+                    "type": "string"
+                },
+                "ProjectId": {
+                    "description": "The project that applied the rules",
+                    "type": "integer"
+                },
+                "Sku": {
+                    "description": "The project that applied the rules",
+                    "type": "string"
+                },
+                "VendorId": {
+                    "description": "The vendors unique identifier",
+                    "type": "string"
+                }
+            }
+        },
+        "main.dltaVmAsset": {
+            "type": "object",
+            "properties": {
+                "CommonAttributes": {
+                    "description": "Standard attributes are set for all assets",
+                    "$ref": "#/definitions/main.commonAttibutes"
+                },
+                "ObjectAttributes": {
+                    "description": "Where the Real asset attributes are stored\nNote that compute.VirtualMachine is an Azure data structure",
+                    "$ref": "#/definitions/compute.VirtualMachine"
+                },
+                "TagAttributes": {
+                    "description": "Tag attributes are set by applying rules to the dataset",
+                    "$ref": "#/definitions/main.tagAttributes"
+                }
+            }
+        },
+        "main.tagAttributes": {
+            "type": "object",
+            "properties": {
+                "Attributes": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/main.attribute"
+                    }
+                }
+            }
+        },
+        "multipart.FileHeader": {
+            "type": "object",
+            "properties": {
+                "filename": {
+                    "type": "string"
+                },
+                "header": {
+                    "$ref": "#/definitions/textproto.MIMEHeader"
+                },
+                "size": {
+                    "type": "integer"
+                }
+            }
+        },
+        "multipart.Form": {
+            "type": "object",
+            "properties": {
+                "file": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/definitions/multipart.FileHeader"
+                        }
+                    }
+                },
+                "value": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "array",
+                        "items": {
                             "type": "string"
                         }
                     }
+                }
+            }
+        },
+        "net.IPNet": {
+            "type": "object",
+            "properties": {
+                "ip": {
+                    "description": "network number",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "mask": {
+                    "description": "network mask",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "pkix.AttributeTypeAndValue": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "value": {}
+            }
+        },
+        "pkix.Extension": {
+            "type": "object",
+            "properties": {
+                "critical": {
+                    "type": "boolean"
+                },
+                "id": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "value": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "pkix.Name": {
+            "type": "object",
+            "properties": {
+                "country": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "extraNames": {
+                    "description": "ExtraNames contains attributes to be copied, raw, into any marshaled\ndistinguished names. Values override any attributes with the same OID.\nThe ExtraNames field is not populated when parsing, see Names.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/pkix.AttributeTypeAndValue"
+                    }
+                },
+                "locality": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "names": {
+                    "description": "Names contains all parsed attributes. When parsing distinguished names,\nthis can be used to extract non-standard attributes that are not parsed\nby this package. When marshaling to RDNSequences, the Names field is\nignored, see ExtraNames.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/pkix.AttributeTypeAndValue"
+                    }
+                },
+                "serialNumber": {
+                    "type": "string"
+                },
+                "streetAddress": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "textproto.MIMEHeader": {
+            "type": "object",
+            "additionalProperties": {
+                "type": "array",
+                "items": {
+                    "type": "string"
+                }
+            }
+        },
+        "tls.ConnectionState": {
+            "type": "object",
+            "properties": {
+                "cipherSuite": {
+                    "description": "CipherSuite is the cipher suite negotiated for the connection (e.g.\nTLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256, TLS_AES_128_GCM_SHA256).",
+                    "type": "integer"
+                },
+                "didResume": {
+                    "description": "DidResume is true if this connection was successfully resumed from a\nprevious session with a session ticket or similar mechanism.",
+                    "type": "boolean"
+                },
+                "handshakeComplete": {
+                    "description": "HandshakeComplete is true if the handshake has concluded.",
+                    "type": "boolean"
+                },
+                "negotiatedProtocol": {
+                    "description": "NegotiatedProtocol is the application protocol negotiated with ALPN.",
+                    "type": "string"
+                },
+                "negotiatedProtocolIsMutual": {
+                    "description": "NegotiatedProtocolIsMutual used to indicate a mutual NPN negotiation.\n\nDeprecated: this value is always true.",
+                    "type": "boolean"
+                },
+                "ocspresponse": {
+                    "description": "OCSPResponse is a stapled Online Certificate Status Protocol (OCSP)\nresponse provided by the peer for the leaf certificate, if any.",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "peerCertificates": {
+                    "description": "PeerCertificates are the parsed certificates sent by the peer, in the\norder in which they were sent. The first element is the leaf certificate\nthat the connection is verified against.\n\nOn the client side, it can't be empty. On the server side, it can be\nempty if Config.ClientAuth is not RequireAnyClientCert or\nRequireAndVerifyClientCert.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/x509.Certificate"
+                    }
+                },
+                "serverName": {
+                    "description": "ServerName is the value of the Server Name Indication extension sent by\nthe client. It's available both on the server and on the client side.",
+                    "type": "string"
+                },
+                "signedCertificateTimestamps": {
+                    "description": "SignedCertificateTimestamps is a list of SCTs provided by the peer\nthrough the TLS handshake for the leaf certificate, if any.",
+                    "type": "array",
+                    "items": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "tlsunique": {
+                    "description": "TLSUnique contains the \"tls-unique\" channel binding value (see RFC 5929,\nSection 3). This value will be nil for TLS 1.3 connections and for all\nresumed connections.\n\nDeprecated: there are conditions in which this value might not be unique\nto a connection. See the Security Considerations sections of RFC 5705 and\nRFC 7627, and https://mitls.org/pages/attacks/3SHAKE#channelbindings.",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "verifiedChains": {
+                    "description": "VerifiedChains is a list of one or more chains where the first element is\nPeerCertificates[0] and the last element is from Config.RootCAs (on the\nclient side) or Config.ClientCAs (on the server side).\n\nOn the client side, it's set if Config.InsecureSkipVerify is false. On\nthe server side, it's set if Config.ClientAuth is VerifyClientCertIfGiven\n(and the peer provided a certificate) or RequireAndVerifyClientCert.",
+                    "type": "array",
+                    "items": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/definitions/x509.Certificate"
+                        }
+                    }
+                },
+                "version": {
+                    "description": "Version is the TLS version used by the connection (e.g. VersionTLS12).",
+                    "type": "integer"
+                }
+            }
+        },
+        "url.URL": {
+            "type": "object",
+            "properties": {
+                "forceQuery": {
+                    "description": "append a query ('?') even if RawQuery is empty",
+                    "type": "boolean"
+                },
+                "fragment": {
+                    "description": "fragment for references, without '#'",
+                    "type": "string"
+                },
+                "host": {
+                    "description": "host or host:port",
+                    "type": "string"
+                },
+                "opaque": {
+                    "description": "encoded opaque data",
+                    "type": "string"
+                },
+                "path": {
+                    "description": "path (relative paths may omit leading slash)",
+                    "type": "string"
+                },
+                "rawFragment": {
+                    "description": "encoded fragment hint (see EscapedFragment method)",
+                    "type": "string"
+                },
+                "rawPath": {
+                    "description": "encoded path hint (see EscapedPath method)",
+                    "type": "string"
+                },
+                "rawQuery": {
+                    "description": "encoded query values, without '?'",
+                    "type": "string"
+                },
+                "scheme": {
+                    "type": "string"
+                },
+                "user": {
+                    "description": "username and password information",
+                    "$ref": "#/definitions/url.Userinfo"
+                }
+            }
+        },
+        "url.Userinfo": {
+            "type": "object"
+        },
+        "url.Values": {
+            "type": "object",
+            "additionalProperties": {
+                "type": "array",
+                "items": {
+                    "type": "string"
+                }
+            }
+        },
+        "x509.Certificate": {
+            "type": "object",
+            "properties": {
+                "authorityKeyId": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "basicConstraintsValid": {
+                    "description": "BasicConstraintsValid indicates whether IsCA, MaxPathLen,\nand MaxPathLenZero are valid.",
+                    "type": "boolean"
+                },
+                "crldistributionPoints": {
+                    "description": "CRL Distribution Points",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "dnsnames": {
+                    "description": "Subject Alternate Name values. (Note that these values may not be valid\nif invalid values were contained within a parsed certificate. For\nexample, an element of DNSNames may not be a valid DNS domain name.)",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "emailAddresses": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "excludedDNSDomains": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "excludedEmailAddresses": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "excludedIPRanges": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/net.IPNet"
+                    }
+                },
+                "excludedURIDomains": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "extKeyUsage": {
+                    "description": "Sequence of extended key usages.",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "extensions": {
+                    "description": "Extensions contains raw X.509 extensions. When parsing certificates,\nthis can be used to extract non-critical extensions that are not\nparsed by this package. When marshaling certificates, the Extensions\nfield is ignored, see ExtraExtensions.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/pkix.Extension"
+                    }
+                },
+                "extraExtensions": {
+                    "description": "ExtraExtensions contains extensions to be copied, raw, into any\nmarshaled certificates. Values override any extensions that would\notherwise be produced based on the other fields. The ExtraExtensions\nfield is not populated when parsing certificates, see Extensions.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/pkix.Extension"
+                    }
+                },
+                "ipaddresses": {
+                    "type": "array",
+                    "items": {
+                        "description": "network number",
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "isCA": {
+                    "type": "boolean"
+                },
+                "issuer": {
+                    "$ref": "#/definitions/pkix.Name"
+                },
+                "issuingCertificateURL": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "keyUsage": {
+                    "type": "integer"
+                },
+                "maxPathLen": {
+                    "description": "MaxPathLen and MaxPathLenZero indicate the presence and\nvalue of the BasicConstraints' \"pathLenConstraint\".\n\nWhen parsing a certificate, a positive non-zero MaxPathLen\nmeans that the field was specified, -1 means it was unset,\nand MaxPathLenZero being true mean that the field was\nexplicitly set to zero. The case of MaxPathLen==0 with MaxPathLenZero==false\nshould be treated equivalent to -1 (unset).\n\nWhen generating a certificate, an unset pathLenConstraint\ncan be requested with either MaxPathLen == -1 or using the\nzero value for both MaxPathLen and MaxPathLenZero.",
+                    "type": "integer"
+                },
+                "maxPathLenZero": {
+                    "description": "MaxPathLenZero indicates that BasicConstraintsValid==true\nand MaxPathLen==0 should be interpreted as an actual\nmaximum path length of zero. Otherwise, that combination is\ninterpreted as MaxPathLen not being set.",
+                    "type": "boolean"
+                },
+                "notBefore": {
+                    "description": "Validity bounds.",
+                    "type": "string"
+                },
+                "ocspserver": {
+                    "description": "RFC 5280, 4.2.2.1 (Authority Information Access)",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "permittedDNSDomains": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "permittedDNSDomainsCritical": {
+                    "description": "Name constraints",
+                    "type": "boolean"
+                },
+                "permittedEmailAddresses": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "permittedIPRanges": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/net.IPNet"
+                    }
+                },
+                "permittedURIDomains": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "policyIdentifiers": {
+                    "type": "array",
+                    "items": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "publicKey": {},
+                "publicKeyAlgorithm": {
+                    "type": "integer"
+                },
+                "raw": {
+                    "description": "Complete ASN.1 DER content (certificate, signature algorithm and signature).",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "rawIssuer": {
+                    "description": "DER encoded Issuer",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "rawSubject": {
+                    "description": "DER encoded Subject",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "rawSubjectPublicKeyInfo": {
+                    "description": "DER encoded SubjectPublicKeyInfo.",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "rawTBSCertificate": {
+                    "description": "Certificate part of raw ASN.1 DER content.",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "serialNumber": {
+                    "$ref": "#/definitions/big.Int"
+                },
+                "signature": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "signatureAlgorithm": {
+                    "type": "integer"
+                },
+                "subject": {
+                    "$ref": "#/definitions/pkix.Name"
+                },
+                "subjectKeyId": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "unhandledCriticalExtensions": {
+                    "description": "UnhandledCriticalExtensions contains a list of extension IDs that\nwere not (fully) processed when parsing. Verify will fail if this\nslice is non-empty, unless verification is delegated to an OS\nlibrary which understands all the critical extensions.\n\nUsers can access these extensions using Extensions and can remove\nelements from this slice if they believe that they have been\nhandled.",
+                    "type": "array",
+                    "items": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "unknownExtKeyUsage": {
+                    "description": "Encountered extended key usages unknown to this package.",
+                    "type": "array",
+                    "items": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "uris": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/url.URL"
+                    }
+                },
+                "version": {
+                    "type": "integer"
                 }
             }
         }

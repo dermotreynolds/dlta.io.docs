@@ -1,4 +1,2113 @@
 basePath: /api/v1
+definitions:
+  big.Int:
+    type: object
+  compute.AdditionalCapabilities:
+    properties:
+      ultraSSDEnabled:
+        description: UltraSSDEnabled - The flag that enables or disables a capability
+          to have one or more managed data disks with UltraSSD_LRS storage account
+          type on the VM or VMSS. Managed disks with storage account type UltraSSD_LRS
+          can be added to a virtual machine or virtual machine scale set only if this
+          property is enabled.
+        type: boolean
+    type: object
+  compute.AdditionalUnattendContent:
+    properties:
+      componentName:
+        description: 'ComponentName - The component name. Currently, the only allowable
+          value is Microsoft-Windows-Shell-Setup. Possible values include: ''MicrosoftWindowsShellSetup'''
+        type: string
+      content:
+        description: Content - Specifies the XML formatted content that is added to
+          the unattend.xml file for the specified path and component. The XML must
+          be less than 4KB and must include the root element for the setting or feature
+          that is being inserted.
+        type: string
+      passName:
+        description: 'PassName - The pass name. Currently, the only allowable value
+          is OobeSystem. Possible values include: ''OobeSystem'''
+        type: string
+      settingName:
+        description: 'SettingName - Specifies the name of the setting to which the
+          content applies. Possible values are: FirstLogonCommands and AutoLogon.
+          Possible values include: ''AutoLogon'', ''FirstLogonCommands'''
+        type: string
+    type: object
+  compute.BootDiagnostics:
+    properties:
+      enabled:
+        description: Enabled - Whether boot diagnostics should be enabled on the Virtual
+          Machine.
+        type: boolean
+      storageUri:
+        description: StorageURI - Uri of the storage account to use for placing the
+          console output and screenshot.
+        type: string
+    type: object
+  compute.BootDiagnosticsInstanceView:
+    properties:
+      consoleScreenshotBlobUri:
+        description: ConsoleScreenshotBlobURI - READ-ONLY; The console screenshot
+          blob URI.
+        type: string
+      serialConsoleLogBlobUri:
+        description: SerialConsoleLogBlobURI - READ-ONLY; The Linux serial console
+          log blob Uri.
+        type: string
+      status:
+        $ref: '#/definitions/compute.InstanceViewStatus'
+        description: 'Status - READ-ONLY; The boot diagnostics status information
+          for the VM. <br><br> NOTE: It will be set only if there are errors encountered
+          in enabling boot diagnostics.'
+    type: object
+  compute.DataDisk:
+    properties:
+      caching:
+        description: 'Caching - Specifies the caching requirements. <br><br> Possible
+          values are: <br><br> **None** <br><br> **ReadOnly** <br><br> **ReadWrite**
+          <br><br> Default: **None for Standard storage. ReadOnly for Premium storage**.
+          Possible values include: ''CachingTypesNone'', ''CachingTypesReadOnly'',
+          ''CachingTypesReadWrite'''
+        type: string
+      createOption:
+        description: 'CreateOption - Specifies how the virtual machine should be created.<br><br>
+          Possible values are:<br><br> **Attach** \u2013 This value is used when you
+          are using a specialized disk to create the virtual machine.<br><br> **FromImage**
+          \u2013 This value is used when you are using an image to create the virtual
+          machine. If you are using a platform image, you also use the imageReference
+          element described above. If you are using a marketplace image, you  also
+          use the plan element previously described. Possible values include: ''DiskCreateOptionTypesFromImage'',
+          ''DiskCreateOptionTypesEmpty'', ''DiskCreateOptionTypesAttach'''
+        type: string
+      diskSizeGB:
+        description: DiskSizeGB - Specifies the size of an empty data disk in gigabytes.
+          This element can be used to overwrite the size of the disk in a virtual
+          machine image. <br><br> This value cannot be larger than 1023 GB
+        type: integer
+      image:
+        $ref: '#/definitions/compute.VirtualHardDisk'
+        description: Image - The source user image virtual hard disk. The virtual
+          hard disk will be copied before being attached to the virtual machine. If
+          SourceImage is provided, the destination virtual hard drive must not exist.
+      lun:
+        description: Lun - Specifies the logical unit number of the data disk. This
+          value is used to identify data disks within the VM and therefore must be
+          unique for each data disk attached to a VM.
+        type: integer
+      managedDisk:
+        $ref: '#/definitions/compute.ManagedDiskParameters'
+        description: ManagedDisk - The managed disk parameters.
+      name:
+        description: Name - The disk name.
+        type: string
+      vhd:
+        $ref: '#/definitions/compute.VirtualHardDisk'
+        description: Vhd - The virtual hard disk.
+      writeAcceleratorEnabled:
+        description: WriteAcceleratorEnabled - Specifies whether writeAccelerator
+          should be enabled or disabled on the disk.
+        type: boolean
+    type: object
+  compute.DiagnosticsProfile:
+    properties:
+      bootDiagnostics:
+        $ref: '#/definitions/compute.BootDiagnostics'
+        description: BootDiagnostics - Boot Diagnostics is a debugging feature which
+          allows you to view Console Output and Screenshot to diagnose VM status.
+          <br><br> You can easily view the output of your console log. <br><br> Azure
+          also enables you to see a screenshot of the VM from the hypervisor.
+    type: object
+  compute.DiffDiskSettings:
+    properties:
+      option:
+        description: 'Option - Specifies the ephemeral disk settings for operating
+          system disk. Possible values include: ''Local'''
+        type: string
+    type: object
+  compute.DiskEncryptionSettings:
+    properties:
+      diskEncryptionKey:
+        $ref: '#/definitions/compute.KeyVaultSecretReference'
+        description: DiskEncryptionKey - Specifies the location of the disk encryption
+          key, which is a Key Vault Secret.
+      enabled:
+        description: Enabled - Specifies whether disk encryption should be enabled
+          on the virtual machine.
+        type: boolean
+      keyEncryptionKey:
+        $ref: '#/definitions/compute.KeyVaultKeyReference'
+        description: KeyEncryptionKey - Specifies the location of the key encryption
+          key in Key Vault.
+    type: object
+  compute.DiskInstanceView:
+    properties:
+      encryptionSettings:
+        description: 'EncryptionSettings - Specifies the encryption settings for the
+          OS Disk. <br><br> Minimum api-version: 2015-06-15'
+        items:
+          $ref: '#/definitions/compute.DiskEncryptionSettings'
+        type: array
+      name:
+        description: Name - The disk name.
+        type: string
+      statuses:
+        description: Statuses - The resource status information.
+        items:
+          $ref: '#/definitions/compute.InstanceViewStatus'
+        type: array
+    type: object
+  compute.HardwareProfile:
+    properties:
+      vmSize:
+        description: 'VMSize - Specifies the size of the virtual machine. For more
+          information about virtual machine sizes, see [Sizes for virtual machines](https://docs.microsoft.com/azure/virtual-machines/virtual-machines-windows-sizes?toc=%2fazure%2fvirtual-machines%2fwindows%2ftoc.json).
+          <br><br> The available VM sizes depend on region and availability set. For
+          a list of available sizes use these APIs:  <br><br> [List all available
+          virtual machine sizes in an availability set](https://docs.microsoft.com/rest/api/compute/availabilitysets/listavailablesizes)
+          <br><br> [List all available virtual machine sizes in a region](https://docs.microsoft.com/rest/api/compute/virtualmachinesizes/list)
+          <br><br> [List all available virtual machine sizes for resizing](https://docs.microsoft.com/rest/api/compute/virtualmachines/listavailablesizes).
+          Possible values include: ''VirtualMachineSizeTypesBasicA0'', ''VirtualMachineSizeTypesBasicA1'',
+          ''VirtualMachineSizeTypesBasicA2'', ''VirtualMachineSizeTypesBasicA3'',
+          ''VirtualMachineSizeTypesBasicA4'', ''VirtualMachineSizeTypesStandardA0'',
+          ''VirtualMachineSizeTypesStandardA1'', ''VirtualMachineSizeTypesStandardA2'',
+          ''VirtualMachineSizeTypesStandardA3'', ''VirtualMachineSizeTypesStandardA4'',
+          ''VirtualMachineSizeTypesStandardA5'', ''VirtualMachineSizeTypesStandardA6'',
+          ''VirtualMachineSizeTypesStandardA7'', ''VirtualMachineSizeTypesStandardA8'',
+          ''VirtualMachineSizeTypesStandardA9'', ''VirtualMachineSizeTypesStandardA10'',
+          ''VirtualMachineSizeTypesStandardA11'', ''VirtualMachineSizeTypesStandardA1V2'',
+          ''VirtualMachineSizeTypesStandardA2V2'', ''VirtualMachineSizeTypesStandardA4V2'',
+          ''VirtualMachineSizeTypesStandardA8V2'', ''VirtualMachineSizeTypesStandardA2mV2'',
+          ''VirtualMachineSizeTypesStandardA4mV2'', ''VirtualMachineSizeTypesStandardA8mV2'',
+          ''VirtualMachineSizeTypesStandardB1s'', ''VirtualMachineSizeTypesStandardB1ms'',
+          ''VirtualMachineSizeTypesStandardB2s'', ''VirtualMachineSizeTypesStandardB2ms'',
+          ''VirtualMachineSizeTypesStandardB4ms'', ''VirtualMachineSizeTypesStandardB8ms'',
+          ''VirtualMachineSizeTypesStandardD1'', ''VirtualMachineSizeTypesStandardD2'',
+          ''VirtualMachineSizeTypesStandardD3'', ''VirtualMachineSizeTypesStandardD4'',
+          ''VirtualMachineSizeTypesStandardD11'', ''VirtualMachineSizeTypesStandardD12'',
+          ''VirtualMachineSizeTypesStandardD13'', ''VirtualMachineSizeTypesStandardD14'',
+          ''VirtualMachineSizeTypesStandardD1V2'', ''VirtualMachineSizeTypesStandardD2V2'',
+          ''VirtualMachineSizeTypesStandardD3V2'', ''VirtualMachineSizeTypesStandardD4V2'',
+          ''VirtualMachineSizeTypesStandardD5V2'', ''VirtualMachineSizeTypesStandardD2V3'',
+          ''VirtualMachineSizeTypesStandardD4V3'', ''VirtualMachineSizeTypesStandardD8V3'',
+          ''VirtualMachineSizeTypesStandardD16V3'', ''VirtualMachineSizeTypesStandardD32V3'',
+          ''VirtualMachineSizeTypesStandardD64V3'', ''VirtualMachineSizeTypesStandardD2sV3'',
+          ''VirtualMachineSizeTypesStandardD4sV3'', ''VirtualMachineSizeTypesStandardD8sV3'',
+          ''VirtualMachineSizeTypesStandardD16sV3'', ''VirtualMachineSizeTypesStandardD32sV3'',
+          ''VirtualMachineSizeTypesStandardD64sV3'', ''VirtualMachineSizeTypesStandardD11V2'',
+          ''VirtualMachineSizeTypesStandardD12V2'', ''VirtualMachineSizeTypesStandardD13V2'',
+          ''VirtualMachineSizeTypesStandardD14V2'', ''VirtualMachineSizeTypesStandardD15V2'',
+          ''VirtualMachineSizeTypesStandardDS1'', ''VirtualMachineSizeTypesStandardDS2'',
+          ''VirtualMachineSizeTypesStandardDS3'', ''VirtualMachineSizeTypesStandardDS4'',
+          ''VirtualMachineSizeTypesStandardDS11'', ''VirtualMachineSizeTypesStandardDS12'',
+          ''VirtualMachineSizeTypesStandardDS13'', ''VirtualMachineSizeTypesStandardDS14'',
+          ''VirtualMachineSizeTypesStandardDS1V2'', ''VirtualMachineSizeTypesStandardDS2V2'',
+          ''VirtualMachineSizeTypesStandardDS3V2'', ''VirtualMachineSizeTypesStandardDS4V2'',
+          ''VirtualMachineSizeTypesStandardDS5V2'', ''VirtualMachineSizeTypesStandardDS11V2'',
+          ''VirtualMachineSizeTypesStandardDS12V2'', ''VirtualMachineSizeTypesStandardDS13V2'',
+          ''VirtualMachineSizeTypesStandardDS14V2'', ''VirtualMachineSizeTypesStandardDS15V2'',
+          ''VirtualMachineSizeTypesStandardDS134V2'', ''VirtualMachineSizeTypesStandardDS132V2'',
+          ''VirtualMachineSizeTypesStandardDS148V2'', ''VirtualMachineSizeTypesStandardDS144V2'',
+          ''VirtualMachineSizeTypesStandardE2V3'', ''VirtualMachineSizeTypesStandardE4V3'',
+          ''VirtualMachineSizeTypesStandardE8V3'', ''VirtualMachineSizeTypesStandardE16V3'',
+          ''VirtualMachineSizeTypesStandardE32V3'', ''VirtualMachineSizeTypesStandardE64V3'',
+          ''VirtualMachineSizeTypesStandardE2sV3'', ''VirtualMachineSizeTypesStandardE4sV3'',
+          ''VirtualMachineSizeTypesStandardE8sV3'', ''VirtualMachineSizeTypesStandardE16sV3'',
+          ''VirtualMachineSizeTypesStandardE32sV3'', ''VirtualMachineSizeTypesStandardE64sV3'',
+          ''VirtualMachineSizeTypesStandardE3216V3'', ''VirtualMachineSizeTypesStandardE328sV3'',
+          ''VirtualMachineSizeTypesStandardE6432sV3'', ''VirtualMachineSizeTypesStandardE6416sV3'',
+          ''VirtualMachineSizeTypesStandardF1'', ''VirtualMachineSizeTypesStandardF2'',
+          ''VirtualMachineSizeTypesStandardF4'', ''VirtualMachineSizeTypesStandardF8'',
+          ''VirtualMachineSizeTypesStandardF16'', ''VirtualMachineSizeTypesStandardF1s'',
+          ''VirtualMachineSizeTypesStandardF2s'', ''VirtualMachineSizeTypesStandardF4s'',
+          ''VirtualMachineSizeTypesStandardF8s'', ''VirtualMachineSizeTypesStandardF16s'',
+          ''VirtualMachineSizeTypesStandardF2sV2'', ''VirtualMachineSizeTypesStandardF4sV2'',
+          ''VirtualMachineSizeTypesStandardF8sV2'', ''VirtualMachineSizeTypesStandardF16sV2'',
+          ''VirtualMachineSizeTypesStandardF32sV2'', ''VirtualMachineSizeTypesStandardF64sV2'',
+          ''VirtualMachineSizeTypesStandardF72sV2'', ''VirtualMachineSizeTypesStandardG1'',
+          ''VirtualMachineSizeTypesStandardG2'', ''VirtualMachineSizeTypesStandardG3'',
+          ''VirtualMachineSizeTypesStandardG4'', ''VirtualMachineSizeTypesStandardG5'',
+          ''VirtualMachineSizeTypesStandardGS1'', ''VirtualMachineSizeTypesStandardGS2'',
+          ''VirtualMachineSizeTypesStandardGS3'', ''VirtualMachineSizeTypesStandardGS4'',
+          ''VirtualMachineSizeTypesStandardGS5'', ''VirtualMachineSizeTypesStandardGS48'',
+          ''VirtualMachineSizeTypesStandardGS44'', ''VirtualMachineSizeTypesStandardGS516'',
+          ''VirtualMachineSizeTypesStandardGS58'', ''VirtualMachineSizeTypesStandardH8'',
+          ''VirtualMachineSizeTypesStandardH16'', ''VirtualMachineSizeTypesStandardH8m'',
+          ''VirtualMachineSizeTypesStandardH16m'', ''VirtualMachineSizeTypesStandardH16r'',
+          ''VirtualMachineSizeTypesStandardH16mr'', ''VirtualMachineSizeTypesStandardL4s'',
+          ''VirtualMachineSizeTypesStandardL8s'', ''VirtualMachineSizeTypesStandardL16s'',
+          ''VirtualMachineSizeTypesStandardL32s'', ''VirtualMachineSizeTypesStandardM64s'',
+          ''VirtualMachineSizeTypesStandardM64ms'', ''VirtualMachineSizeTypesStandardM128s'',
+          ''VirtualMachineSizeTypesStandardM128ms'', ''VirtualMachineSizeTypesStandardM6432ms'',
+          ''VirtualMachineSizeTypesStandardM6416ms'', ''VirtualMachineSizeTypesStandardM12864ms'',
+          ''VirtualMachineSizeTypesStandardM12832ms'', ''VirtualMachineSizeTypesStandardNC6'',
+          ''VirtualMachineSizeTypesStandardNC12'', ''VirtualMachineSizeTypesStandardNC24'',
+          ''VirtualMachineSizeTypesStandardNC24r'', ''VirtualMachineSizeTypesStandardNC6sV2'',
+          ''VirtualMachineSizeTypesStandardNC12sV2'', ''VirtualMachineSizeTypesStandardNC24sV2'',
+          ''VirtualMachineSizeTypesStandardNC24rsV2'', ''VirtualMachineSizeTypesStandardNC6sV3'',
+          ''VirtualMachineSizeTypesStandardNC12sV3'', ''VirtualMachineSizeTypesStandardNC24sV3'',
+          ''VirtualMachineSizeTypesStandardNC24rsV3'', ''VirtualMachineSizeTypesStandardND6s'',
+          ''VirtualMachineSizeTypesStandardND12s'', ''VirtualMachineSizeTypesStandardND24s'',
+          ''VirtualMachineSizeTypesStandardND24rs'', ''VirtualMachineSizeTypesStandardNV6'',
+          ''VirtualMachineSizeTypesStandardNV12'', ''VirtualMachineSizeTypesStandardNV24'''
+        type: string
+    type: object
+  compute.ImageReference:
+    properties:
+      id:
+        description: ID - Resource Id
+        type: string
+      offer:
+        description: Offer - Specifies the offer of the platform image or marketplace
+          image used to create the virtual machine.
+        type: string
+      publisher:
+        description: Publisher - The image publisher.
+        type: string
+      sku:
+        description: Sku - The image SKU.
+        type: string
+      version:
+        description: Version - Specifies the version of the platform image or marketplace
+          image used to create the virtual machine. The allowed formats are Major.Minor.Build
+          or 'latest'. Major, Minor, and Build are decimal numbers. Specify 'latest'
+          to use the latest version of an image available at deploy time. Even if
+          you use 'latest', the VM image will not automatically update after deploy
+          time even if a new version becomes available.
+        type: string
+    type: object
+  compute.InstanceViewStatus:
+    properties:
+      code:
+        description: Code - The status code.
+        type: string
+      displayStatus:
+        description: DisplayStatus - The short localizable label for the status.
+        type: string
+      level:
+        description: 'Level - The level code. Possible values include: ''Info'', ''Warning'',
+          ''Error'''
+        type: string
+      message:
+        description: Message - The detailed status message, including for alerts and
+          error messages.
+        type: string
+      time:
+        description: Time - The time of the status.
+        type: string
+    type: object
+  compute.KeyVaultKeyReference:
+    properties:
+      keyUrl:
+        description: KeyURL - The URL referencing a key encryption key in Key Vault.
+        type: string
+      sourceVault:
+        $ref: '#/definitions/compute.SubResource'
+        description: SourceVault - The relative URL of the Key Vault containing the
+          key.
+    type: object
+  compute.KeyVaultSecretReference:
+    properties:
+      secretUrl:
+        description: SecretURL - The URL referencing a secret in a Key Vault.
+        type: string
+      sourceVault:
+        $ref: '#/definitions/compute.SubResource'
+        description: SourceVault - The relative URL of the Key Vault containing the
+          secret.
+    type: object
+  compute.LinuxConfiguration:
+    properties:
+      disablePasswordAuthentication:
+        description: DisablePasswordAuthentication - Specifies whether password authentication
+          should be disabled.
+        type: boolean
+      provisionVMAgent:
+        description: ProvisionVMAgent - Indicates whether virtual machine agent should
+          be provisioned on the virtual machine. <br><br> When this property is not
+          specified in the request body, default behavior is to set it to true.  This
+          will ensure that VM Agent is installed on the VM so that extensions can
+          be added to the VM later.
+        type: boolean
+      ssh:
+        $ref: '#/definitions/compute.SSHConfiguration'
+        description: SSH - Specifies the ssh key configuration for a Linux OS.
+    type: object
+  compute.MaintenanceRedeployStatus:
+    properties:
+      isCustomerInitiatedMaintenanceAllowed:
+        description: IsCustomerInitiatedMaintenanceAllowed - True, if customer is
+          allowed to perform Maintenance.
+        type: boolean
+      lastOperationMessage:
+        description: LastOperationMessage - Message returned for the last Maintenance
+          Operation.
+        type: string
+      lastOperationResultCode:
+        description: 'LastOperationResultCode - The Last Maintenance Operation Result
+          Code. Possible values include: ''MaintenanceOperationResultCodeTypesNone'',
+          ''MaintenanceOperationResultCodeTypesRetryLater'', ''MaintenanceOperationResultCodeTypesMaintenanceAborted'',
+          ''MaintenanceOperationResultCodeTypesMaintenanceCompleted'''
+        type: string
+      maintenanceWindowEndTime:
+        description: MaintenanceWindowEndTime - End Time for the Maintenance Window.
+        type: string
+      maintenanceWindowStartTime:
+        description: MaintenanceWindowStartTime - Start Time for the Maintenance Window.
+        type: string
+      preMaintenanceWindowEndTime:
+        description: PreMaintenanceWindowEndTime - End Time for the Pre Maintenance
+          Window.
+        type: string
+      preMaintenanceWindowStartTime:
+        description: PreMaintenanceWindowStartTime - Start Time for the Pre Maintenance
+          Window.
+        type: string
+    type: object
+  compute.ManagedDiskParameters:
+    properties:
+      id:
+        description: ID - Resource Id
+        type: string
+      storageAccountType:
+        description: 'StorageAccountType - Specifies the storage account type for
+          the managed disk. NOTE: UltraSSD_LRS can only be used with data disks, it
+          cannot be used with OS Disk. Possible values include: ''StorageAccountTypesStandardLRS'',
+          ''StorageAccountTypesPremiumLRS'', ''StorageAccountTypesStandardSSDLRS'',
+          ''StorageAccountTypesUltraSSDLRS'''
+        type: string
+    type: object
+  compute.NetworkInterfaceReference:
+    properties:
+      id:
+        description: ID - Resource Id
+        type: string
+      primary:
+        description: Primary - Specifies the primary network interface in case the
+          virtual machine has more than 1 network interface.
+        type: boolean
+    type: object
+  compute.NetworkProfile:
+    properties:
+      networkInterfaces:
+        description: NetworkInterfaces - Specifies the list of resource Ids for the
+          network interfaces associated with the virtual machine.
+        items:
+          $ref: '#/definitions/compute.NetworkInterfaceReference'
+        type: array
+    type: object
+  compute.OSDisk:
+    properties:
+      caching:
+        description: 'Caching - Specifies the caching requirements. <br><br> Possible
+          values are: <br><br> **None** <br><br> **ReadOnly** <br><br> **ReadWrite**
+          <br><br> Default: **None for Standard storage. ReadOnly for Premium storage**.
+          Possible values include: ''CachingTypesNone'', ''CachingTypesReadOnly'',
+          ''CachingTypesReadWrite'''
+        type: string
+      createOption:
+        description: 'CreateOption - Specifies how the virtual machine should be created.<br><br>
+          Possible values are:<br><br> **Attach** \u2013 This value is used when you
+          are using a specialized disk to create the virtual machine.<br><br> **FromImage**
+          \u2013 This value is used when you are using an image to create the virtual
+          machine. If you are using a platform image, you also use the imageReference
+          element described above. If you are using a marketplace image, you  also
+          use the plan element previously described. Possible values include: ''DiskCreateOptionTypesFromImage'',
+          ''DiskCreateOptionTypesEmpty'', ''DiskCreateOptionTypesAttach'''
+        type: string
+      diffDiskSettings:
+        $ref: '#/definitions/compute.DiffDiskSettings'
+        description: DiffDiskSettings - Specifies the ephemeral Disk Settings for
+          the operating system disk used by the virtual machine.
+      diskSizeGB:
+        description: DiskSizeGB - Specifies the size of an empty data disk in gigabytes.
+          This element can be used to overwrite the size of the disk in a virtual
+          machine image. <br><br> This value cannot be larger than 1023 GB
+        type: integer
+      encryptionSettings:
+        $ref: '#/definitions/compute.DiskEncryptionSettings'
+        description: 'EncryptionSettings - Specifies the encryption settings for the
+          OS Disk. <br><br> Minimum api-version: 2015-06-15'
+      image:
+        $ref: '#/definitions/compute.VirtualHardDisk'
+        description: Image - The source user image virtual hard disk. The virtual
+          hard disk will be copied before being attached to the virtual machine. If
+          SourceImage is provided, the destination virtual hard drive must not exist.
+      managedDisk:
+        $ref: '#/definitions/compute.ManagedDiskParameters'
+        description: ManagedDisk - The managed disk parameters.
+      name:
+        description: Name - The disk name.
+        type: string
+      osType:
+        description: 'OsType - This property allows you to specify the type of the
+          OS that is included in the disk if creating a VM from user-image or a specialized
+          VHD. <br><br> Possible values are: <br><br> **Windows** <br><br> **Linux**.
+          Possible values include: ''Windows'', ''Linux'''
+        type: string
+      vhd:
+        $ref: '#/definitions/compute.VirtualHardDisk'
+        description: Vhd - The virtual hard disk.
+      writeAcceleratorEnabled:
+        description: WriteAcceleratorEnabled - Specifies whether writeAccelerator
+          should be enabled or disabled on the disk.
+        type: boolean
+    type: object
+  compute.OSProfile:
+    properties:
+      adminPassword:
+        description: AdminPassword - Specifies the password of the administrator account.
+          <br><br> **Minimum-length (Windows):** 8 characters <br><br> **Minimum-length
+          (Linux):** 6 characters <br><br> **Max-length (Windows):** 123 characters
+          <br><br> **Max-length (Linux):** 72 characters <br><br> **Complexity requirements:**
+          3 out of 4 conditions below need to be fulfilled <br> Has lower characters
+          <br>Has upper characters <br> Has a digit <br> Has a special character (Regex
+          match [\W_]) <br><br> **Disallowed values:** "abc@123", "P@$$w0rd", "P@ssw0rd",
+          "P@ssword123", "Pa$$word", "pass@word1", "Password!", "Password1", "Password22",
+          "iloveyou!" <br><br> For resetting the password, see [How to reset the Remote
+          Desktop service or its login password in a Windows VM](https://docs.microsoft.com/azure/virtual-machines/virtual-machines-windows-reset-rdp?toc=%2fazure%2fvirtual-machines%2fwindows%2ftoc.json)
+          <br><br> For resetting root password, see [Manage users, SSH, and check
+          or repair disks on Azure Linux VMs using the VMAccess Extension](https://docs.microsoft.com/azure/virtual-machines/virtual-machines-linux-using-vmaccess-extension?toc=%2fazure%2fvirtual-machines%2flinux%2ftoc.json#reset-root-password)
+        type: string
+      adminUsername:
+        description: AdminUsername - Specifies the name of the administrator account.
+          <br><br> **Windows-only restriction:** Cannot end in "." <br><br> **Disallowed
+          values:** "administrator", "admin", "user", "user1", "test", "user2", "test1",
+          "user3", "admin1", "1", "123", "a", "actuser", "adm", "admin2", "aspnet",
+          "backup", "console", "david", "guest", "john", "owner", "root", "server",
+          "sql", "support", "support_388945a0", "sys", "test2", "test3", "user4",
+          "user5". <br><br> **Minimum-length (Linux):** 1  character <br><br> **Max-length
+          (Linux):** 64 characters <br><br> **Max-length (Windows):** 20 characters  <br><br><li>
+          For root access to the Linux VM, see [Using root privileges on Linux virtual
+          machines in Azure](https://docs.microsoft.com/azure/virtual-machines/virtual-machines-linux-use-root-privileges?toc=%2fazure%2fvirtual-machines%2flinux%2ftoc.json)<br><li>
+          For a list of built-in system users on Linux that should not be used in
+          this field, see [Selecting User Names for Linux on Azure](https://docs.microsoft.com/azure/virtual-machines/virtual-machines-linux-usernames?toc=%2fazure%2fvirtual-machines%2flinux%2ftoc.json)
+        type: string
+      allowExtensionOperations:
+        description: AllowExtensionOperations - Specifies whether extension operations
+          should be allowed on the virtual machine. <br><br>This may only be set to
+          False when no extensions are present on the virtual machine.
+        type: boolean
+      computerName:
+        description: ComputerName - Specifies the host OS name of the virtual machine.
+          <br><br> This name cannot be updated after the VM is created. <br><br> **Max-length
+          (Windows):** 15 characters <br><br> **Max-length (Linux):** 64 characters.
+          <br><br> For naming conventions and restrictions see [Azure infrastructure
+          services implementation guidelines](https://docs.microsoft.com/azure/virtual-machines/virtual-machines-linux-infrastructure-subscription-accounts-guidelines?toc=%2fazure%2fvirtual-machines%2flinux%2ftoc.json#1-naming-conventions).
+        type: string
+      customData:
+        description: CustomData - Specifies a base-64 encoded string of custom data.
+          The base-64 encoded string is decoded to a binary array that is saved as
+          a file on the Virtual Machine. The maximum length of the binary array is
+          65535 bytes. <br><br> For using cloud-init for your VM, see [Using cloud-init
+          to customize a Linux VM during creation](https://docs.microsoft.com/azure/virtual-machines/virtual-machines-linux-using-cloud-init?toc=%2fazure%2fvirtual-machines%2flinux%2ftoc.json)
+        type: string
+      linuxConfiguration:
+        $ref: '#/definitions/compute.LinuxConfiguration'
+        description: LinuxConfiguration - Specifies the Linux operating system settings
+          on the virtual machine. <br><br>For a list of supported Linux distributions,
+          see [Linux on Azure-Endorsed Distributions](https://docs.microsoft.com/azure/virtual-machines/virtual-machines-linux-endorsed-distros?toc=%2fazure%2fvirtual-machines%2flinux%2ftoc.json)
+          <br><br> For running non-endorsed distributions, see [Information for Non-Endorsed
+          Distributions](https://docs.microsoft.com/azure/virtual-machines/virtual-machines-linux-create-upload-generic?toc=%2fazure%2fvirtual-machines%2flinux%2ftoc.json).
+      secrets:
+        description: Secrets - Specifies set of certificates that should be installed
+          onto the virtual machine.
+        items:
+          $ref: '#/definitions/compute.VaultSecretGroup'
+        type: array
+      windowsConfiguration:
+        $ref: '#/definitions/compute.WindowsConfiguration'
+        description: WindowsConfiguration - Specifies Windows operating system settings
+          on the virtual machine.
+    type: object
+  compute.Plan:
+    properties:
+      name:
+        description: Name - The plan ID.
+        type: string
+      product:
+        description: Product - Specifies the product of the image from the marketplace.
+          This is the same value as Offer under the imageReference element.
+        type: string
+      promotionCode:
+        description: PromotionCode - The promotion code.
+        type: string
+      publisher:
+        description: Publisher - The publisher ID.
+        type: string
+    type: object
+  compute.SSHConfiguration:
+    properties:
+      publicKeys:
+        description: PublicKeys - The list of SSH public keys used to authenticate
+          with linux based VMs.
+        items:
+          $ref: '#/definitions/compute.SSHPublicKey'
+        type: array
+    type: object
+  compute.SSHPublicKey:
+    properties:
+      keyData:
+        description: KeyData - SSH public key certificate used to authenticate with
+          the VM through ssh. The key needs to be at least 2048-bit and in ssh-rsa
+          format. <br><br> For creating ssh keys, see [Create SSH keys on Linux and
+          Mac for Linux VMs in Azure](https://docs.microsoft.com/azure/virtual-machines/virtual-machines-linux-mac-create-ssh-keys?toc=%2fazure%2fvirtual-machines%2flinux%2ftoc.json).
+        type: string
+      path:
+        description: 'Path - Specifies the full path on the created VM where ssh public
+          key is stored. If the file already exists, the specified key is appended
+          to the file. Example: /home/user/.ssh/authorized_keys'
+        type: string
+    type: object
+  compute.StorageProfile:
+    properties:
+      dataDisks:
+        description: DataDisks - Specifies the parameters that are used to add a data
+          disk to a virtual machine. <br><br> For more information about disks, see
+          [About disks and VHDs for Azure virtual machines](https://docs.microsoft.com/azure/virtual-machines/virtual-machines-windows-about-disks-vhds?toc=%2fazure%2fvirtual-machines%2fwindows%2ftoc.json).
+        items:
+          $ref: '#/definitions/compute.DataDisk'
+        type: array
+      imageReference:
+        $ref: '#/definitions/compute.ImageReference'
+        description: ImageReference - Specifies information about the image to use.
+          You can specify information about platform images, marketplace images, or
+          virtual machine images. This element is required when you want to use a
+          platform image, marketplace image, or virtual machine image, but is not
+          used in other creation operations.
+      osDisk:
+        $ref: '#/definitions/compute.OSDisk'
+        description: OsDisk - Specifies information about the operating system disk
+          used by the virtual machine. <br><br> For more information about disks,
+          see [About disks and VHDs for Azure virtual machines](https://docs.microsoft.com/azure/virtual-machines/virtual-machines-windows-about-disks-vhds?toc=%2fazure%2fvirtual-machines%2fwindows%2ftoc.json).
+    type: object
+  compute.SubResource:
+    properties:
+      id:
+        description: ID - Resource Id
+        type: string
+    type: object
+  compute.VaultCertificate:
+    properties:
+      certificateStore:
+        description: CertificateStore - For Windows VMs, specifies the certificate
+          store on the Virtual Machine to which the certificate should be added. The
+          specified certificate store is implicitly in the LocalMachine account. <br><br>For
+          Linux VMs, the certificate file is placed under the /var/lib/waagent directory,
+          with the file name &lt;UppercaseThumbprint&gt;.crt for the X509 certificate
+          file and &lt;UppercaseThumbprint&gt;.prv for private key. Both of these
+          files are .pem formatted.
+        type: string
+      certificateUrl:
+        description: 'CertificateURL - This is the URL of a certificate that has been
+          uploaded to Key Vault as a secret. For adding a secret to the Key Vault,
+          see [Add a key or secret to the key vault](https://docs.microsoft.com/azure/key-vault/key-vault-get-started/#add).
+          In this case, your certificate needs to be It is the Base64 encoding of
+          the following JSON Object which is encoded in UTF-8: <br><br> {<br>  "data":"<Base64-encoded-certificate>",<br>  "dataType":"pfx",<br>  "password":"<pfx-file-password>"<br>}'
+        type: string
+    type: object
+  compute.VaultSecretGroup:
+    properties:
+      sourceVault:
+        $ref: '#/definitions/compute.SubResource'
+        description: SourceVault - The relative URL of the Key Vault containing all
+          of the certificates in VaultCertificates.
+      vaultCertificates:
+        description: VaultCertificates - The list of key vault references in SourceVault
+          which contain certificates.
+        items:
+          $ref: '#/definitions/compute.VaultCertificate'
+        type: array
+    type: object
+  compute.VirtualHardDisk:
+    properties:
+      uri:
+        description: URI - Specifies the virtual hard disk's uri.
+        type: string
+    type: object
+  compute.VirtualMachine:
+    properties:
+      additionalCapabilities:
+        $ref: '#/definitions/compute.AdditionalCapabilities'
+        description: AdditionalCapabilities - Specifies additional capabilities enabled
+          or disabled on the virtual machine.
+      availabilitySet:
+        $ref: '#/definitions/compute.SubResource'
+        description: AvailabilitySet - Specifies information about the availability
+          set that the virtual machine should be assigned to. Virtual machines specified
+          in the same availability set are allocated to different nodes to maximize
+          availability. For more information about availability sets, see [Manage
+          the availability of virtual machines](https://docs.microsoft.com/azure/virtual-machines/virtual-machines-windows-manage-availability?toc=%2fazure%2fvirtual-machines%2fwindows%2ftoc.json).
+          <br><br> For more information on Azure planned maintenance, see [Planned
+          maintenance for virtual machines in Azure](https://docs.microsoft.com/azure/virtual-machines/virtual-machines-windows-planned-maintenance?toc=%2fazure%2fvirtual-machines%2fwindows%2ftoc.json)
+          <br><br> Currently, a VM can only be added to availability set at creation
+          time. An existing VM cannot be added to an availability set.
+      body:
+        description: |-
+          Body represents the response body.
+
+          The response body is streamed on demand as the Body field
+          is read. If the network connection fails or the server
+          terminates the response, Body.Read calls return an error.
+
+          The http Client and Transport guarantee that Body is always
+          non-nil, even on responses without a body or responses with
+          a zero-length body. It is the caller's responsibility to
+          close Body. The default HTTP client's Transport may not
+          reuse HTTP/1.x "keep-alive" TCP connections if the Body is
+          not read to completion and closed.
+
+          The Body is automatically dechunked if the server replied
+          with a "chunked" Transfer-Encoding.
+
+          As of Go 1.12, the Body will also implement io.Writer
+          on a successful "101 Switching Protocols" response,
+          as used by WebSockets and HTTP/2's "h2c" mode.
+      close:
+        description: |-
+          Close records whether the header directed that the connection be
+          closed after reading Body. The value is advice for clients: neither
+          ReadResponse nor Response.Write ever closes a connection.
+        type: boolean
+      contentLength:
+        description: |-
+          ContentLength records the length of the associated content. The
+          value -1 indicates that the length is unknown. Unless Request.Method
+          is "HEAD", values >= 0 indicate that the given number of bytes may
+          be read from Body.
+        type: integer
+      diagnosticsProfile:
+        $ref: '#/definitions/compute.DiagnosticsProfile'
+        description: 'DiagnosticsProfile - Specifies the boot diagnostic settings
+          state. <br><br>Minimum api-version: 2015-06-15.'
+      hardwareProfile:
+        $ref: '#/definitions/compute.HardwareProfile'
+        description: HardwareProfile - Specifies the hardware settings for the virtual
+          machine.
+      header:
+        $ref: '#/definitions/http.Header'
+        description: |-
+          Header maps header keys to values. If the response had multiple
+          headers with the same key, they may be concatenated, with comma
+          delimiters.  (RFC 7230, section 3.2.2 requires that multiple headers
+          be semantically equivalent to a comma-delimited sequence.) When
+          Header values are duplicated by other fields in this struct (e.g.,
+          ContentLength, TransferEncoding, Trailer), the field values are
+          authoritative.
+
+          Keys in the map are canonicalized (see CanonicalHeaderKey).
+      id:
+        description: ID - READ-ONLY; Resource Id
+        type: string
+      identity:
+        $ref: '#/definitions/compute.VirtualMachineIdentity'
+        description: Identity - The identity of the virtual machine, if configured.
+      instanceView:
+        $ref: '#/definitions/compute.VirtualMachineInstanceView'
+        description: InstanceView - READ-ONLY; The virtual machine instance view.
+      licenseType:
+        description: 'LicenseType - Specifies that the image or disk that is being
+          used was licensed on-premises. This element is only used for images that
+          contain the Windows Server operating system. <br><br> Possible values are:
+          <br><br> Windows_Client <br><br> Windows_Server <br><br> If this element
+          is included in a request for an update, the value must match the initial
+          value. This value cannot be updated. <br><br> For more information, see
+          [Azure Hybrid Use Benefit for Windows Server](https://docs.microsoft.com/azure/virtual-machines/virtual-machines-windows-hybrid-use-benefit-licensing?toc=%2fazure%2fvirtual-machines%2fwindows%2ftoc.json)
+          <br><br> Minimum api-version: 2015-06-15'
+        type: string
+      location:
+        description: Location - Resource location
+        type: string
+      name:
+        description: Name - READ-ONLY; Resource name
+        type: string
+      networkProfile:
+        $ref: '#/definitions/compute.NetworkProfile'
+        description: NetworkProfile - Specifies the network interfaces of the virtual
+          machine.
+      osProfile:
+        $ref: '#/definitions/compute.OSProfile'
+        description: OsProfile - Specifies the operating system settings for the virtual
+          machine.
+      plan:
+        $ref: '#/definitions/compute.Plan'
+        description: Plan - Specifies information about the marketplace image used
+          to create the virtual machine. This element is only used for marketplace
+          images. Before you can use a marketplace image from an API, you must enable
+          the image for programmatic use.  In the Azure portal, find the marketplace
+          image that you want to use and then click **Want to deploy programmatically,
+          Get Started ->**. Enter any required information and then click **Save**.
+      proto:
+        description: e.g. "HTTP/1.0"
+        type: string
+      protoMajor:
+        description: e.g. 1
+        type: integer
+      protoMinor:
+        description: e.g. 0
+        type: integer
+      provisioningState:
+        description: ProvisioningState - READ-ONLY; The provisioning state, which
+          only appears in the response.
+        type: string
+      proximityPlacementGroup:
+        $ref: '#/definitions/compute.SubResource'
+        description: 'ProximityPlacementGroup - Specifies information about the proximity
+          placement group that the virtual machine should be assigned to. <br><br>Minimum
+          api-version: 2018-04-01.'
+      request:
+        $ref: '#/definitions/http.Request'
+        description: |-
+          Request is the request that was sent to obtain this Response.
+          Request's Body is nil (having already been consumed).
+          This is only populated for Client requests.
+      resources:
+        description: Resources - READ-ONLY; The virtual machine child extension resources.
+        items:
+          $ref: '#/definitions/compute.VirtualMachineExtension'
+        type: array
+      status:
+        description: e.g. "200 OK"
+        type: string
+      statusCode:
+        description: e.g. 200
+        type: integer
+      storageProfile:
+        $ref: '#/definitions/compute.StorageProfile'
+        description: StorageProfile - Specifies the storage settings for the virtual
+          machine disks.
+      tags:
+        additionalProperties:
+          type: string
+        description: Tags - Resource tags
+        type: object
+      tls:
+        $ref: '#/definitions/tls.ConnectionState'
+        description: |-
+          TLS contains information about the TLS connection on which the
+          response was received. It is nil for unencrypted responses.
+          The pointer is shared between responses and should not be
+          modified.
+      trailer:
+        $ref: '#/definitions/http.Header'
+        description: |-
+          Trailer maps trailer keys to values in the same
+          format as Header.
+
+          The Trailer initially contains only nil values, one for
+          each key specified in the server's "Trailer" header
+          value. Those values are not added to Header.
+
+          Trailer must not be accessed concurrently with Read calls
+          on the Body.
+
+          After Body.Read has returned io.EOF, Trailer will contain
+          any trailer values sent by the server.
+      transferEncoding:
+        description: |-
+          Contains transfer encodings from outer-most to inner-most. Value is
+          nil, means that "identity" encoding is used.
+        items:
+          type: string
+        type: array
+      type:
+        description: Type - READ-ONLY; Resource type
+        type: string
+      uncompressed:
+        description: |-
+          Uncompressed reports whether the response was sent compressed but
+          was decompressed by the http package. When true, reading from
+          Body yields the uncompressed content instead of the compressed
+          content actually set from the server, ContentLength is set to -1,
+          and the "Content-Length" and "Content-Encoding" fields are deleted
+          from the responseHeader. To get the original response from
+          the server, set Transport.DisableCompression to true.
+        type: boolean
+      vmId:
+        description: VMID - READ-ONLY; Specifies the VM unique ID which is a 128-bits
+          identifier that is encoded and stored in all Azure IaaS VMs SMBIOS and can
+          be read using platform BIOS commands.
+        type: string
+      zones:
+        description: Zones - The virtual machine zones.
+        items:
+          type: string
+        type: array
+    type: object
+  compute.VirtualMachineAgentInstanceView:
+    properties:
+      extensionHandlers:
+        description: ExtensionHandlers - The virtual machine extension handler instance
+          view.
+        items:
+          $ref: '#/definitions/compute.VirtualMachineExtensionHandlerInstanceView'
+        type: array
+      statuses:
+        description: Statuses - The resource status information.
+        items:
+          $ref: '#/definitions/compute.InstanceViewStatus'
+        type: array
+      vmAgentVersion:
+        description: VMAgentVersion - The VM Agent full version.
+        type: string
+    type: object
+  compute.VirtualMachineExtension:
+    properties:
+      autoUpgradeMinorVersion:
+        description: AutoUpgradeMinorVersion - Indicates whether the extension should
+          use a newer minor version if one is available at deployment time. Once deployed,
+          however, the extension will not upgrade minor versions unless redeployed,
+          even with this property set to true.
+        type: boolean
+      body:
+        description: |-
+          Body represents the response body.
+
+          The response body is streamed on demand as the Body field
+          is read. If the network connection fails or the server
+          terminates the response, Body.Read calls return an error.
+
+          The http Client and Transport guarantee that Body is always
+          non-nil, even on responses without a body or responses with
+          a zero-length body. It is the caller's responsibility to
+          close Body. The default HTTP client's Transport may not
+          reuse HTTP/1.x "keep-alive" TCP connections if the Body is
+          not read to completion and closed.
+
+          The Body is automatically dechunked if the server replied
+          with a "chunked" Transfer-Encoding.
+
+          As of Go 1.12, the Body will also implement io.Writer
+          on a successful "101 Switching Protocols" response,
+          as used by WebSockets and HTTP/2's "h2c" mode.
+      close:
+        description: |-
+          Close records whether the header directed that the connection be
+          closed after reading Body. The value is advice for clients: neither
+          ReadResponse nor Response.Write ever closes a connection.
+        type: boolean
+      contentLength:
+        description: |-
+          ContentLength records the length of the associated content. The
+          value -1 indicates that the length is unknown. Unless Request.Method
+          is "HEAD", values >= 0 indicate that the given number of bytes may
+          be read from Body.
+        type: integer
+      forceUpdateTag:
+        description: ForceUpdateTag - How the extension handler should be forced to
+          update even if the extension configuration has not changed.
+        type: string
+      header:
+        $ref: '#/definitions/http.Header'
+        description: |-
+          Header maps header keys to values. If the response had multiple
+          headers with the same key, they may be concatenated, with comma
+          delimiters.  (RFC 7230, section 3.2.2 requires that multiple headers
+          be semantically equivalent to a comma-delimited sequence.) When
+          Header values are duplicated by other fields in this struct (e.g.,
+          ContentLength, TransferEncoding, Trailer), the field values are
+          authoritative.
+
+          Keys in the map are canonicalized (see CanonicalHeaderKey).
+      id:
+        description: ID - READ-ONLY; Resource Id
+        type: string
+      instanceView:
+        $ref: '#/definitions/compute.VirtualMachineExtensionInstanceView'
+        description: InstanceView - The virtual machine extension instance view.
+      location:
+        description: Location - Resource location
+        type: string
+      name:
+        description: Name - READ-ONLY; Resource name
+        type: string
+      protectedSettings:
+        description: ProtectedSettings - The extension can contain either protectedSettings
+          or protectedSettingsFromKeyVault or no protected settings at all.
+      proto:
+        description: e.g. "HTTP/1.0"
+        type: string
+      protoMajor:
+        description: e.g. 1
+        type: integer
+      protoMinor:
+        description: e.g. 0
+        type: integer
+      provisioningState:
+        description: ProvisioningState - READ-ONLY; The provisioning state, which
+          only appears in the response.
+        type: string
+      publisher:
+        description: Publisher - The name of the extension handler publisher.
+        type: string
+      request:
+        $ref: '#/definitions/http.Request'
+        description: |-
+          Request is the request that was sent to obtain this Response.
+          Request's Body is nil (having already been consumed).
+          This is only populated for Client requests.
+      settings:
+        description: Settings - Json formatted public settings for the extension.
+      status:
+        description: e.g. "200 OK"
+        type: string
+      statusCode:
+        description: e.g. 200
+        type: integer
+      tags:
+        additionalProperties:
+          type: string
+        description: Tags - Resource tags
+        type: object
+      tls:
+        $ref: '#/definitions/tls.ConnectionState'
+        description: |-
+          TLS contains information about the TLS connection on which the
+          response was received. It is nil for unencrypted responses.
+          The pointer is shared between responses and should not be
+          modified.
+      trailer:
+        $ref: '#/definitions/http.Header'
+        description: |-
+          Trailer maps trailer keys to values in the same
+          format as Header.
+
+          The Trailer initially contains only nil values, one for
+          each key specified in the server's "Trailer" header
+          value. Those values are not added to Header.
+
+          Trailer must not be accessed concurrently with Read calls
+          on the Body.
+
+          After Body.Read has returned io.EOF, Trailer will contain
+          any trailer values sent by the server.
+      transferEncoding:
+        description: |-
+          Contains transfer encodings from outer-most to inner-most. Value is
+          nil, means that "identity" encoding is used.
+        items:
+          type: string
+        type: array
+      type:
+        description: Type - READ-ONLY; Resource type
+        type: string
+      typeHandlerVersion:
+        description: TypeHandlerVersion - Specifies the version of the script handler.
+        type: string
+      uncompressed:
+        description: |-
+          Uncompressed reports whether the response was sent compressed but
+          was decompressed by the http package. When true, reading from
+          Body yields the uncompressed content instead of the compressed
+          content actually set from the server, ContentLength is set to -1,
+          and the "Content-Length" and "Content-Encoding" fields are deleted
+          from the responseHeader. To get the original response from
+          the server, set Transport.DisableCompression to true.
+        type: boolean
+    type: object
+  compute.VirtualMachineExtensionHandlerInstanceView:
+    properties:
+      status:
+        $ref: '#/definitions/compute.InstanceViewStatus'
+        description: Status - The extension handler status.
+      type:
+        description: Type - Specifies the type of the extension; an example is "CustomScriptExtension".
+        type: string
+      typeHandlerVersion:
+        description: TypeHandlerVersion - Specifies the version of the script handler.
+        type: string
+    type: object
+  compute.VirtualMachineExtensionInstanceView:
+    properties:
+      name:
+        description: Name - The virtual machine extension name.
+        type: string
+      statuses:
+        description: Statuses - The resource status information.
+        items:
+          $ref: '#/definitions/compute.InstanceViewStatus'
+        type: array
+      substatuses:
+        description: Substatuses - The resource status information.
+        items:
+          $ref: '#/definitions/compute.InstanceViewStatus'
+        type: array
+      type:
+        description: Type - Specifies the type of the extension; an example is "CustomScriptExtension".
+        type: string
+      typeHandlerVersion:
+        description: TypeHandlerVersion - Specifies the version of the script handler.
+        type: string
+    type: object
+  compute.VirtualMachineIdentity:
+    properties:
+      principalId:
+        description: PrincipalID - READ-ONLY; The principal id of virtual machine
+          identity. This property will only be provided for a system assigned identity.
+        type: string
+      tenantId:
+        description: TenantID - READ-ONLY; The tenant id associated with the virtual
+          machine. This property will only be provided for a system assigned identity.
+        type: string
+      type:
+        description: 'Type - The type of identity used for the virtual machine. The
+          type ''SystemAssigned, UserAssigned'' includes both an implicitly created
+          identity and a set of user assigned identities. The type ''None'' will remove
+          any identities from the virtual machine. Possible values include: ''ResourceIdentityTypeSystemAssigned'',
+          ''ResourceIdentityTypeUserAssigned'', ''ResourceIdentityTypeSystemAssignedUserAssigned'',
+          ''ResourceIdentityTypeNone'''
+        type: string
+      userAssignedIdentities:
+        additionalProperties:
+          $ref: '#/definitions/compute.VirtualMachineIdentityUserAssignedIdentitiesValue'
+        description: 'UserAssignedIdentities - The list of user identities associated
+          with the Virtual Machine. The user identity dictionary key references will
+          be ARM resource ids in the form: ''/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ManagedIdentity/userAssignedIdentities/{identityName}''.'
+        type: object
+    type: object
+  compute.VirtualMachineIdentityUserAssignedIdentitiesValue:
+    properties:
+      clientId:
+        description: ClientID - READ-ONLY; The client id of user assigned identity.
+        type: string
+      principalId:
+        description: PrincipalID - READ-ONLY; The principal id of user assigned identity.
+        type: string
+    type: object
+  compute.VirtualMachineInstanceView:
+    properties:
+      body:
+        description: |-
+          Body represents the response body.
+
+          The response body is streamed on demand as the Body field
+          is read. If the network connection fails or the server
+          terminates the response, Body.Read calls return an error.
+
+          The http Client and Transport guarantee that Body is always
+          non-nil, even on responses without a body or responses with
+          a zero-length body. It is the caller's responsibility to
+          close Body. The default HTTP client's Transport may not
+          reuse HTTP/1.x "keep-alive" TCP connections if the Body is
+          not read to completion and closed.
+
+          The Body is automatically dechunked if the server replied
+          with a "chunked" Transfer-Encoding.
+
+          As of Go 1.12, the Body will also implement io.Writer
+          on a successful "101 Switching Protocols" response,
+          as used by WebSockets and HTTP/2's "h2c" mode.
+      bootDiagnostics:
+        $ref: '#/definitions/compute.BootDiagnosticsInstanceView'
+        description: BootDiagnostics - Boot Diagnostics is a debugging feature which
+          allows you to view Console Output and Screenshot to diagnose VM status.
+          <br><br> You can easily view the output of your console log. <br><br> Azure
+          also enables you to see a screenshot of the VM from the hypervisor.
+      close:
+        description: |-
+          Close records whether the header directed that the connection be
+          closed after reading Body. The value is advice for clients: neither
+          ReadResponse nor Response.Write ever closes a connection.
+        type: boolean
+      computerName:
+        description: ComputerName - The computer name assigned to the virtual machine.
+        type: string
+      contentLength:
+        description: |-
+          ContentLength records the length of the associated content. The
+          value -1 indicates that the length is unknown. Unless Request.Method
+          is "HEAD", values >= 0 indicate that the given number of bytes may
+          be read from Body.
+        type: integer
+      disks:
+        description: Disks - The virtual machine disk information.
+        items:
+          $ref: '#/definitions/compute.DiskInstanceView'
+        type: array
+      extensions:
+        description: Extensions - The extensions information.
+        items:
+          $ref: '#/definitions/compute.VirtualMachineExtensionInstanceView'
+        type: array
+      header:
+        $ref: '#/definitions/http.Header'
+        description: |-
+          Header maps header keys to values. If the response had multiple
+          headers with the same key, they may be concatenated, with comma
+          delimiters.  (RFC 7230, section 3.2.2 requires that multiple headers
+          be semantically equivalent to a comma-delimited sequence.) When
+          Header values are duplicated by other fields in this struct (e.g.,
+          ContentLength, TransferEncoding, Trailer), the field values are
+          authoritative.
+
+          Keys in the map are canonicalized (see CanonicalHeaderKey).
+      maintenanceRedeployStatus:
+        $ref: '#/definitions/compute.MaintenanceRedeployStatus'
+        description: MaintenanceRedeployStatus - The Maintenance Operation status
+          on the virtual machine.
+      osName:
+        description: OsName - The Operating System running on the virtual machine.
+        type: string
+      osVersion:
+        description: OsVersion - The version of Operating System running on the virtual
+          machine.
+        type: string
+      platformFaultDomain:
+        description: PlatformFaultDomain - Specifies the fault domain of the virtual
+          machine.
+        type: integer
+      platformUpdateDomain:
+        description: PlatformUpdateDomain - Specifies the update domain of the virtual
+          machine.
+        type: integer
+      proto:
+        description: e.g. "HTTP/1.0"
+        type: string
+      protoMajor:
+        description: e.g. 1
+        type: integer
+      protoMinor:
+        description: e.g. 0
+        type: integer
+      rdpThumbPrint:
+        description: RdpThumbPrint - The Remote desktop certificate thumbprint.
+        type: string
+      request:
+        $ref: '#/definitions/http.Request'
+        description: |-
+          Request is the request that was sent to obtain this Response.
+          Request's Body is nil (having already been consumed).
+          This is only populated for Client requests.
+      status:
+        description: e.g. "200 OK"
+        type: string
+      statusCode:
+        description: e.g. 200
+        type: integer
+      statuses:
+        description: Statuses - The resource status information.
+        items:
+          $ref: '#/definitions/compute.InstanceViewStatus'
+        type: array
+      tls:
+        $ref: '#/definitions/tls.ConnectionState'
+        description: |-
+          TLS contains information about the TLS connection on which the
+          response was received. It is nil for unencrypted responses.
+          The pointer is shared between responses and should not be
+          modified.
+      trailer:
+        $ref: '#/definitions/http.Header'
+        description: |-
+          Trailer maps trailer keys to values in the same
+          format as Header.
+
+          The Trailer initially contains only nil values, one for
+          each key specified in the server's "Trailer" header
+          value. Those values are not added to Header.
+
+          Trailer must not be accessed concurrently with Read calls
+          on the Body.
+
+          After Body.Read has returned io.EOF, Trailer will contain
+          any trailer values sent by the server.
+      transferEncoding:
+        description: |-
+          Contains transfer encodings from outer-most to inner-most. Value is
+          nil, means that "identity" encoding is used.
+        items:
+          type: string
+        type: array
+      uncompressed:
+        description: |-
+          Uncompressed reports whether the response was sent compressed but
+          was decompressed by the http package. When true, reading from
+          Body yields the uncompressed content instead of the compressed
+          content actually set from the server, ContentLength is set to -1,
+          and the "Content-Length" and "Content-Encoding" fields are deleted
+          from the responseHeader. To get the original response from
+          the server, set Transport.DisableCompression to true.
+        type: boolean
+      vmAgent:
+        $ref: '#/definitions/compute.VirtualMachineAgentInstanceView'
+        description: VMAgent - The VM Agent running on the virtual machine.
+    type: object
+  compute.WinRMConfiguration:
+    properties:
+      listeners:
+        description: Listeners - The list of Windows Remote Management listeners
+        items:
+          $ref: '#/definitions/compute.WinRMListener'
+        type: array
+    type: object
+  compute.WinRMListener:
+    properties:
+      certificateUrl:
+        description: 'CertificateURL - This is the URL of a certificate that has been
+          uploaded to Key Vault as a secret. For adding a secret to the Key Vault,
+          see [Add a key or secret to the key vault](https://docs.microsoft.com/azure/key-vault/key-vault-get-started/#add).
+          In this case, your certificate needs to be It is the Base64 encoding of
+          the following JSON Object which is encoded in UTF-8: <br><br> {<br>  "data":"<Base64-encoded-certificate>",<br>  "dataType":"pfx",<br>  "password":"<pfx-file-password>"<br>}'
+        type: string
+      protocol:
+        description: 'Protocol - Specifies the protocol of listener. <br><br> Possible
+          values are: <br>**http** <br><br> **https**. Possible values include: ''HTTP'',
+          ''HTTPS'''
+        type: string
+    type: object
+  compute.WindowsConfiguration:
+    properties:
+      additionalUnattendContent:
+        description: AdditionalUnattendContent - Specifies additional base-64 encoded
+          XML formatted information that can be included in the Unattend.xml file,
+          which is used by Windows Setup.
+        items:
+          $ref: '#/definitions/compute.AdditionalUnattendContent'
+        type: array
+      enableAutomaticUpdates:
+        description: EnableAutomaticUpdates - Indicates whether virtual machine is
+          enabled for automatic updates.
+        type: boolean
+      provisionVMAgent:
+        description: ProvisionVMAgent - Indicates whether virtual machine agent should
+          be provisioned on the virtual machine. <br><br> When this property is not
+          specified in the request body, default behavior is to set it to true.  This
+          will ensure that VM Agent is installed on the VM so that extensions can
+          be added to the VM later.
+        type: boolean
+      timeZone:
+        description: TimeZone - Specifies the time zone of the virtual machine. e.g.
+          "Pacific Standard Time"
+        type: string
+      winRM:
+        $ref: '#/definitions/compute.WinRMConfiguration'
+        description: WinRM - Specifies the Windows Remote Management listeners. This
+          enables remote Windows PowerShell.
+    type: object
+  http.Header:
+    additionalProperties:
+      items:
+        type: string
+      type: array
+    type: object
+  http.Request:
+    properties:
+      body:
+        description: |-
+          Body is the request's body.
+
+          For client requests, a nil body means the request has no
+          body, such as a GET request. The HTTP Client's Transport
+          is responsible for calling the Close method.
+
+          For server requests, the Request Body is always non-nil
+          but will return EOF immediately when no body is present.
+          The Server will close the request body. The ServeHTTP
+          Handler does not need to.
+
+          Body must allow Read to be called concurrently with Close.
+          In particular, calling Close should unblock a Read waiting
+          for input.
+      cancel:
+        description: |-
+          Cancel is an optional channel whose closure indicates that the client
+          request should be regarded as canceled. Not all implementations of
+          RoundTripper may support Cancel.
+
+          For server requests, this field is not applicable.
+
+          Deprecated: Set the Request's context with NewRequestWithContext
+          instead. If a Request's Cancel field and context are both
+          set, it is undefined whether Cancel is respected.
+        type: object
+      close:
+        description: |-
+          Close indicates whether to close the connection after
+          replying to this request (for servers) or after sending this
+          request and reading its response (for clients).
+
+          For server requests, the HTTP server handles this automatically
+          and this field is not needed by Handlers.
+
+          For client requests, setting this field prevents re-use of
+          TCP connections between requests to the same hosts, as if
+          Transport.DisableKeepAlives were set.
+        type: boolean
+      contentLength:
+        description: |-
+          ContentLength records the length of the associated content.
+          The value -1 indicates that the length is unknown.
+          Values >= 0 indicate that the given number of bytes may
+          be read from Body.
+
+          For client requests, a value of 0 with a non-nil Body is
+          also treated as unknown.
+        type: integer
+      form:
+        $ref: '#/definitions/url.Values'
+        description: |-
+          Form contains the parsed form data, including both the URL
+          field's query parameters and the PATCH, POST, or PUT form data.
+          This field is only available after ParseForm is called.
+          The HTTP client ignores Form and uses Body instead.
+      header:
+        $ref: '#/definitions/http.Header'
+        description: "Header contains the request header fields either received\nby
+          the server or to be sent by the client.\n\nIf a server received a request
+          with header lines,\n\n\tHost: example.com\n\taccept-encoding: gzip, deflate\n\tAccept-Language:
+          en-us\n\tfOO: Bar\n\tfoo: two\n\nthen\n\n\tHeader = map[string][]string{\n\t\t\"Accept-Encoding\":
+          {\"gzip, deflate\"},\n\t\t\"Accept-Language\": {\"en-us\"},\n\t\t\"Foo\":
+          {\"Bar\", \"two\"},\n\t}\n\nFor incoming requests, the Host header is promoted
+          to the\nRequest.Host field and removed from the Header map.\n\nHTTP defines
+          that header names are case-insensitive. The\nrequest parser implements this
+          by using CanonicalHeaderKey,\nmaking the first character and any characters
+          following a\nhyphen uppercase and the rest lowercase.\n\nFor client requests,
+          certain headers such as Content-Length\nand Connection are automatically
+          written when needed and\nvalues in Header may be ignored. See the documentation\nfor
+          the Request.Write method."
+      host:
+        description: |-
+          For server requests, Host specifies the host on which the
+          URL is sought. For HTTP/1 (per RFC 7230, section 5.4), this
+          is either the value of the "Host" header or the host name
+          given in the URL itself. For HTTP/2, it is the value of the
+          ":authority" pseudo-header field.
+          It may be of the form "host:port". For international domain
+          names, Host may be in Punycode or Unicode form. Use
+          golang.org/x/net/idna to convert it to either format if
+          needed.
+          To prevent DNS rebinding attacks, server Handlers should
+          validate that the Host header has a value for which the
+          Handler considers itself authoritative. The included
+          ServeMux supports patterns registered to particular host
+          names and thus protects its registered Handlers.
+
+          For client requests, Host optionally overrides the Host
+          header to send. If empty, the Request.Write method uses
+          the value of URL.Host. Host may contain an international
+          domain name.
+        type: string
+      method:
+        description: |-
+          Method specifies the HTTP method (GET, POST, PUT, etc.).
+          For client requests, an empty string means GET.
+
+          Go's HTTP client does not support sending a request with
+          the CONNECT method. See the documentation on Transport for
+          details.
+        type: string
+      multipartForm:
+        $ref: '#/definitions/multipart.Form'
+        description: |-
+          MultipartForm is the parsed multipart form, including file uploads.
+          This field is only available after ParseMultipartForm is called.
+          The HTTP client ignores MultipartForm and uses Body instead.
+      postForm:
+        $ref: '#/definitions/url.Values'
+        description: |-
+          PostForm contains the parsed form data from PATCH, POST
+          or PUT body parameters.
+
+          This field is only available after ParseForm is called.
+          The HTTP client ignores PostForm and uses Body instead.
+      proto:
+        description: |-
+          The protocol version for incoming server requests.
+
+          For client requests, these fields are ignored. The HTTP
+          client code always uses either HTTP/1.1 or HTTP/2.
+          See the docs on Transport for details.
+        type: string
+      protoMajor:
+        description: "1"
+        type: integer
+      protoMinor:
+        description: "0"
+        type: integer
+      remoteAddr:
+        description: |-
+          RemoteAddr allows HTTP servers and other software to record
+          the network address that sent the request, usually for
+          logging. This field is not filled in by ReadRequest and
+          has no defined format. The HTTP server in this package
+          sets RemoteAddr to an "IP:port" address before invoking a
+          handler.
+          This field is ignored by the HTTP client.
+        type: string
+      requestURI:
+        description: |-
+          RequestURI is the unmodified request-target of the
+          Request-Line (RFC 7230, Section 3.1.1) as sent by the client
+          to a server. Usually the URL field should be used instead.
+          It is an error to set this field in an HTTP client request.
+        type: string
+      response:
+        $ref: '#/definitions/http.Response'
+        description: |-
+          Response is the redirect response which caused this request
+          to be created. This field is only populated during client
+          redirects.
+      tls:
+        $ref: '#/definitions/tls.ConnectionState'
+        description: |-
+          TLS allows HTTP servers and other software to record
+          information about the TLS connection on which the request
+          was received. This field is not filled in by ReadRequest.
+          The HTTP server in this package sets the field for
+          TLS-enabled connections before invoking a handler;
+          otherwise it leaves the field nil.
+          This field is ignored by the HTTP client.
+      trailer:
+        $ref: '#/definitions/http.Header'
+        description: |-
+          Trailer specifies additional headers that are sent after the request
+          body.
+
+          For server requests, the Trailer map initially contains only the
+          trailer keys, with nil values. (The client declares which trailers it
+          will later send.)  While the handler is reading from Body, it must
+          not reference Trailer. After reading from Body returns EOF, Trailer
+          can be read again and will contain non-nil values, if they were sent
+          by the client.
+
+          For client requests, Trailer must be initialized to a map containing
+          the trailer keys to later send. The values may be nil or their final
+          values. The ContentLength must be 0 or -1, to send a chunked request.
+          After the HTTP request is sent the map values can be updated while
+          the request body is read. Once the body returns EOF, the caller must
+          not mutate Trailer.
+
+          Few HTTP clients, servers, or proxies support HTTP trailers.
+      transferEncoding:
+        description: |-
+          TransferEncoding lists the transfer encodings from outermost to
+          innermost. An empty list denotes the "identity" encoding.
+          TransferEncoding can usually be ignored; chunked encoding is
+          automatically added and removed as necessary when sending and
+          receiving requests.
+        items:
+          type: string
+        type: array
+      url:
+        $ref: '#/definitions/url.URL'
+        description: |-
+          URL specifies either the URI being requested (for server
+          requests) or the URL to access (for client requests).
+
+          For server requests, the URL is parsed from the URI
+          supplied on the Request-Line as stored in RequestURI.  For
+          most requests, fields other than Path and RawQuery will be
+          empty. (See RFC 7230, Section 5.3)
+
+          For client requests, the URL's Host specifies the server to
+          connect to, while the Request's Host field optionally
+          specifies the Host header value to send in the HTTP
+          request.
+    type: object
+  http.Response:
+    properties:
+      body:
+        description: |-
+          Body represents the response body.
+
+          The response body is streamed on demand as the Body field
+          is read. If the network connection fails or the server
+          terminates the response, Body.Read calls return an error.
+
+          The http Client and Transport guarantee that Body is always
+          non-nil, even on responses without a body or responses with
+          a zero-length body. It is the caller's responsibility to
+          close Body. The default HTTP client's Transport may not
+          reuse HTTP/1.x "keep-alive" TCP connections if the Body is
+          not read to completion and closed.
+
+          The Body is automatically dechunked if the server replied
+          with a "chunked" Transfer-Encoding.
+
+          As of Go 1.12, the Body will also implement io.Writer
+          on a successful "101 Switching Protocols" response,
+          as used by WebSockets and HTTP/2's "h2c" mode.
+      close:
+        description: |-
+          Close records whether the header directed that the connection be
+          closed after reading Body. The value is advice for clients: neither
+          ReadResponse nor Response.Write ever closes a connection.
+        type: boolean
+      contentLength:
+        description: |-
+          ContentLength records the length of the associated content. The
+          value -1 indicates that the length is unknown. Unless Request.Method
+          is "HEAD", values >= 0 indicate that the given number of bytes may
+          be read from Body.
+        type: integer
+      header:
+        $ref: '#/definitions/http.Header'
+        description: |-
+          Header maps header keys to values. If the response had multiple
+          headers with the same key, they may be concatenated, with comma
+          delimiters.  (RFC 7230, section 3.2.2 requires that multiple headers
+          be semantically equivalent to a comma-delimited sequence.) When
+          Header values are duplicated by other fields in this struct (e.g.,
+          ContentLength, TransferEncoding, Trailer), the field values are
+          authoritative.
+
+          Keys in the map are canonicalized (see CanonicalHeaderKey).
+      proto:
+        description: e.g. "HTTP/1.0"
+        type: string
+      protoMajor:
+        description: e.g. 1
+        type: integer
+      protoMinor:
+        description: e.g. 0
+        type: integer
+      request:
+        $ref: '#/definitions/http.Request'
+        description: |-
+          Request is the request that was sent to obtain this Response.
+          Request's Body is nil (having already been consumed).
+          This is only populated for Client requests.
+      status:
+        description: e.g. "200 OK"
+        type: string
+      statusCode:
+        description: e.g. 200
+        type: integer
+      tls:
+        $ref: '#/definitions/tls.ConnectionState'
+        description: |-
+          TLS contains information about the TLS connection on which the
+          response was received. It is nil for unencrypted responses.
+          The pointer is shared between responses and should not be
+          modified.
+      trailer:
+        $ref: '#/definitions/http.Header'
+        description: |-
+          Trailer maps trailer keys to values in the same
+          format as Header.
+
+          The Trailer initially contains only nil values, one for
+          each key specified in the server's "Trailer" header
+          value. Those values are not added to Header.
+
+          Trailer must not be accessed concurrently with Read calls
+          on the Body.
+
+          After Body.Read has returned io.EOF, Trailer will contain
+          any trailer values sent by the server.
+      transferEncoding:
+        description: |-
+          Contains transfer encodings from outer-most to inner-most. Value is
+          nil, means that "identity" encoding is used.
+        items:
+          type: string
+        type: array
+      uncompressed:
+        description: |-
+          Uncompressed reports whether the response was sent compressed but
+          was decompressed by the http package. When true, reading from
+          Body yields the uncompressed content instead of the compressed
+          content actually set from the server, ContentLength is set to -1,
+          and the "Content-Length" and "Content-Encoding" fields are deleted
+          from the responseHeader. To get the original response from
+          the server, set Transport.DisableCompression to true.
+        type: boolean
+    type: object
+  main.attribute:
+    properties:
+      Key:
+        type: string
+      Value:
+        type: string
+    type: object
+  main.commonAttibutes:
+    properties:
+      AssetType:
+        description: When the data was ingested
+        type: string
+      CustomerId:
+        description: The customer that owns the data unique identifier
+        type: integer
+      DltaAssetId:
+        description: Our unique identifier
+        type: integer
+      IngestionTime:
+        description: When the data was ingested
+        type: string
+      Name:
+        description: What the name is fhe
+        type: string
+      Platform:
+        description: The project that applied the rules
+        type: string
+      ProjectId:
+        description: The project that applied the rules
+        type: integer
+      Sku:
+        description: The project that applied the rules
+        type: string
+      VendorId:
+        description: The vendors unique identifier
+        type: string
+    type: object
+  main.dltaVmAsset:
+    properties:
+      CommonAttributes:
+        $ref: '#/definitions/main.commonAttibutes'
+        description: Standard attributes are set for all assets
+      ObjectAttributes:
+        $ref: '#/definitions/compute.VirtualMachine'
+        description: |-
+          Where the Real asset attributes are stored
+          Note that compute.VirtualMachine is an Azure data structure
+      TagAttributes:
+        $ref: '#/definitions/main.tagAttributes'
+        description: Tag attributes are set by applying rules to the dataset
+    type: object
+  main.tagAttributes:
+    properties:
+      Attributes:
+        items:
+          $ref: '#/definitions/main.attribute'
+        type: array
+    type: object
+  multipart.FileHeader:
+    properties:
+      filename:
+        type: string
+      header:
+        $ref: '#/definitions/textproto.MIMEHeader'
+      size:
+        type: integer
+    type: object
+  multipart.Form:
+    properties:
+      file:
+        additionalProperties:
+          items:
+            $ref: '#/definitions/multipart.FileHeader'
+          type: array
+        type: object
+      value:
+        additionalProperties:
+          items:
+            type: string
+          type: array
+        type: object
+    type: object
+  net.IPNet:
+    properties:
+      ip:
+        description: network number
+        items:
+          type: integer
+        type: array
+      mask:
+        description: network mask
+        items:
+          type: integer
+        type: array
+    type: object
+  pkix.AttributeTypeAndValue:
+    properties:
+      type:
+        items:
+          type: integer
+        type: array
+      value: {}
+    type: object
+  pkix.Extension:
+    properties:
+      critical:
+        type: boolean
+      id:
+        items:
+          type: integer
+        type: array
+      value:
+        items:
+          type: integer
+        type: array
+    type: object
+  pkix.Name:
+    properties:
+      country:
+        items:
+          type: string
+        type: array
+      extraNames:
+        description: |-
+          ExtraNames contains attributes to be copied, raw, into any marshaled
+          distinguished names. Values override any attributes with the same OID.
+          The ExtraNames field is not populated when parsing, see Names.
+        items:
+          $ref: '#/definitions/pkix.AttributeTypeAndValue'
+        type: array
+      locality:
+        items:
+          type: string
+        type: array
+      names:
+        description: |-
+          Names contains all parsed attributes. When parsing distinguished names,
+          this can be used to extract non-standard attributes that are not parsed
+          by this package. When marshaling to RDNSequences, the Names field is
+          ignored, see ExtraNames.
+        items:
+          $ref: '#/definitions/pkix.AttributeTypeAndValue'
+        type: array
+      serialNumber:
+        type: string
+      streetAddress:
+        items:
+          type: string
+        type: array
+    type: object
+  textproto.MIMEHeader:
+    additionalProperties:
+      items:
+        type: string
+      type: array
+    type: object
+  tls.ConnectionState:
+    properties:
+      cipherSuite:
+        description: |-
+          CipherSuite is the cipher suite negotiated for the connection (e.g.
+          TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256, TLS_AES_128_GCM_SHA256).
+        type: integer
+      didResume:
+        description: |-
+          DidResume is true if this connection was successfully resumed from a
+          previous session with a session ticket or similar mechanism.
+        type: boolean
+      handshakeComplete:
+        description: HandshakeComplete is true if the handshake has concluded.
+        type: boolean
+      negotiatedProtocol:
+        description: NegotiatedProtocol is the application protocol negotiated with
+          ALPN.
+        type: string
+      negotiatedProtocolIsMutual:
+        description: |-
+          NegotiatedProtocolIsMutual used to indicate a mutual NPN negotiation.
+
+          Deprecated: this value is always true.
+        type: boolean
+      ocspresponse:
+        description: |-
+          OCSPResponse is a stapled Online Certificate Status Protocol (OCSP)
+          response provided by the peer for the leaf certificate, if any.
+        items:
+          type: integer
+        type: array
+      peerCertificates:
+        description: |-
+          PeerCertificates are the parsed certificates sent by the peer, in the
+          order in which they were sent. The first element is the leaf certificate
+          that the connection is verified against.
+
+          On the client side, it can't be empty. On the server side, it can be
+          empty if Config.ClientAuth is not RequireAnyClientCert or
+          RequireAndVerifyClientCert.
+        items:
+          $ref: '#/definitions/x509.Certificate'
+        type: array
+      serverName:
+        description: |-
+          ServerName is the value of the Server Name Indication extension sent by
+          the client. It's available both on the server and on the client side.
+        type: string
+      signedCertificateTimestamps:
+        description: |-
+          SignedCertificateTimestamps is a list of SCTs provided by the peer
+          through the TLS handshake for the leaf certificate, if any.
+        items:
+          items:
+            type: integer
+          type: array
+        type: array
+      tlsunique:
+        description: |-
+          TLSUnique contains the "tls-unique" channel binding value (see RFC 5929,
+          Section 3). This value will be nil for TLS 1.3 connections and for all
+          resumed connections.
+
+          Deprecated: there are conditions in which this value might not be unique
+          to a connection. See the Security Considerations sections of RFC 5705 and
+          RFC 7627, and https://mitls.org/pages/attacks/3SHAKE#channelbindings.
+        items:
+          type: integer
+        type: array
+      verifiedChains:
+        description: |-
+          VerifiedChains is a list of one or more chains where the first element is
+          PeerCertificates[0] and the last element is from Config.RootCAs (on the
+          client side) or Config.ClientCAs (on the server side).
+
+          On the client side, it's set if Config.InsecureSkipVerify is false. On
+          the server side, it's set if Config.ClientAuth is VerifyClientCertIfGiven
+          (and the peer provided a certificate) or RequireAndVerifyClientCert.
+        items:
+          items:
+            $ref: '#/definitions/x509.Certificate'
+          type: array
+        type: array
+      version:
+        description: Version is the TLS version used by the connection (e.g. VersionTLS12).
+        type: integer
+    type: object
+  url.URL:
+    properties:
+      forceQuery:
+        description: append a query ('?') even if RawQuery is empty
+        type: boolean
+      fragment:
+        description: fragment for references, without '#'
+        type: string
+      host:
+        description: host or host:port
+        type: string
+      opaque:
+        description: encoded opaque data
+        type: string
+      path:
+        description: path (relative paths may omit leading slash)
+        type: string
+      rawFragment:
+        description: encoded fragment hint (see EscapedFragment method)
+        type: string
+      rawPath:
+        description: encoded path hint (see EscapedPath method)
+        type: string
+      rawQuery:
+        description: encoded query values, without '?'
+        type: string
+      scheme:
+        type: string
+      user:
+        $ref: '#/definitions/url.Userinfo'
+        description: username and password information
+    type: object
+  url.Userinfo:
+    type: object
+  url.Values:
+    additionalProperties:
+      items:
+        type: string
+      type: array
+    type: object
+  x509.Certificate:
+    properties:
+      authorityKeyId:
+        items:
+          type: integer
+        type: array
+      basicConstraintsValid:
+        description: |-
+          BasicConstraintsValid indicates whether IsCA, MaxPathLen,
+          and MaxPathLenZero are valid.
+        type: boolean
+      crldistributionPoints:
+        description: CRL Distribution Points
+        items:
+          type: string
+        type: array
+      dnsnames:
+        description: |-
+          Subject Alternate Name values. (Note that these values may not be valid
+          if invalid values were contained within a parsed certificate. For
+          example, an element of DNSNames may not be a valid DNS domain name.)
+        items:
+          type: string
+        type: array
+      emailAddresses:
+        items:
+          type: string
+        type: array
+      excludedDNSDomains:
+        items:
+          type: string
+        type: array
+      excludedEmailAddresses:
+        items:
+          type: string
+        type: array
+      excludedIPRanges:
+        items:
+          $ref: '#/definitions/net.IPNet'
+        type: array
+      excludedURIDomains:
+        items:
+          type: string
+        type: array
+      extKeyUsage:
+        description: Sequence of extended key usages.
+        items:
+          type: integer
+        type: array
+      extensions:
+        description: |-
+          Extensions contains raw X.509 extensions. When parsing certificates,
+          this can be used to extract non-critical extensions that are not
+          parsed by this package. When marshaling certificates, the Extensions
+          field is ignored, see ExtraExtensions.
+        items:
+          $ref: '#/definitions/pkix.Extension'
+        type: array
+      extraExtensions:
+        description: |-
+          ExtraExtensions contains extensions to be copied, raw, into any
+          marshaled certificates. Values override any extensions that would
+          otherwise be produced based on the other fields. The ExtraExtensions
+          field is not populated when parsing certificates, see Extensions.
+        items:
+          $ref: '#/definitions/pkix.Extension'
+        type: array
+      ipaddresses:
+        items:
+          description: network number
+          items:
+            type: integer
+          type: array
+        type: array
+      isCA:
+        type: boolean
+      issuer:
+        $ref: '#/definitions/pkix.Name'
+      issuingCertificateURL:
+        items:
+          type: string
+        type: array
+      keyUsage:
+        type: integer
+      maxPathLen:
+        description: |-
+          MaxPathLen and MaxPathLenZero indicate the presence and
+          value of the BasicConstraints' "pathLenConstraint".
+
+          When parsing a certificate, a positive non-zero MaxPathLen
+          means that the field was specified, -1 means it was unset,
+          and MaxPathLenZero being true mean that the field was
+          explicitly set to zero. The case of MaxPathLen==0 with MaxPathLenZero==false
+          should be treated equivalent to -1 (unset).
+
+          When generating a certificate, an unset pathLenConstraint
+          can be requested with either MaxPathLen == -1 or using the
+          zero value for both MaxPathLen and MaxPathLenZero.
+        type: integer
+      maxPathLenZero:
+        description: |-
+          MaxPathLenZero indicates that BasicConstraintsValid==true
+          and MaxPathLen==0 should be interpreted as an actual
+          maximum path length of zero. Otherwise, that combination is
+          interpreted as MaxPathLen not being set.
+        type: boolean
+      notBefore:
+        description: Validity bounds.
+        type: string
+      ocspserver:
+        description: RFC 5280, 4.2.2.1 (Authority Information Access)
+        items:
+          type: string
+        type: array
+      permittedDNSDomains:
+        items:
+          type: string
+        type: array
+      permittedDNSDomainsCritical:
+        description: Name constraints
+        type: boolean
+      permittedEmailAddresses:
+        items:
+          type: string
+        type: array
+      permittedIPRanges:
+        items:
+          $ref: '#/definitions/net.IPNet'
+        type: array
+      permittedURIDomains:
+        items:
+          type: string
+        type: array
+      policyIdentifiers:
+        items:
+          items:
+            type: integer
+          type: array
+        type: array
+      publicKey: {}
+      publicKeyAlgorithm:
+        type: integer
+      raw:
+        description: Complete ASN.1 DER content (certificate, signature algorithm
+          and signature).
+        items:
+          type: integer
+        type: array
+      rawIssuer:
+        description: DER encoded Issuer
+        items:
+          type: integer
+        type: array
+      rawSubject:
+        description: DER encoded Subject
+        items:
+          type: integer
+        type: array
+      rawSubjectPublicKeyInfo:
+        description: DER encoded SubjectPublicKeyInfo.
+        items:
+          type: integer
+        type: array
+      rawTBSCertificate:
+        description: Certificate part of raw ASN.1 DER content.
+        items:
+          type: integer
+        type: array
+      serialNumber:
+        $ref: '#/definitions/big.Int'
+      signature:
+        items:
+          type: integer
+        type: array
+      signatureAlgorithm:
+        type: integer
+      subject:
+        $ref: '#/definitions/pkix.Name'
+      subjectKeyId:
+        items:
+          type: integer
+        type: array
+      unhandledCriticalExtensions:
+        description: |-
+          UnhandledCriticalExtensions contains a list of extension IDs that
+          were not (fully) processed when parsing. Verify will fail if this
+          slice is non-empty, unless verification is delegated to an OS
+          library which understands all the critical extensions.
+
+          Users can access these extensions using Extensions and can remove
+          elements from this slice if they believe that they have been
+          handled.
+        items:
+          items:
+            type: integer
+          type: array
+        type: array
+      unknownExtKeyUsage:
+        description: Encountered extended key usages unknown to this package.
+        items:
+          items:
+            type: integer
+          type: array
+        type: array
+      uris:
+        items:
+          $ref: '#/definitions/url.URL'
+        type: array
+      version:
+        type: integer
+    type: object
 host: localhost:8080
 info:
   contact:
@@ -39,7 +2148,9 @@ paths:
         "200":
           description: OK
           schema:
-            type: string
+            items:
+              $ref: '#/definitions/main.dltaVmAsset'
+            type: array
       summary: get VMs
       tags:
       - example
